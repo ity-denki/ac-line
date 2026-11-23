@@ -1,0 +1,2742 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>ITY電気 エアコン工事 料金シミュレーター</title>
+  <style>
+    /* ============================================================
+       デザイン変数・基本設定（完全単一ファイル・外部CDN/フォント不使用）
+       清潔感のある白＆ブルー基調（電気・空調工事業者向け）
+       ============================================================ */
+    :root {
+      --ity-navy: #0e3a6c;
+      --ity-navy-deep: #09264a;
+      --ity-blue: #1668c7;
+      --ity-blue-dark: #1153a3;
+      --ity-blue-soft: #edf5ff;
+      --ity-blue-border: #93c5fd;
+      --line-green: #06c755;
+      --line-green-dark: #05ad4a;
+
+      --bg-outer: #e6eef7;
+      --bg-page: #f4f8fc;
+      --bg-card: #ffffff;
+      --bg-subtle: #f8fafd;
+
+      --text-main: #1e293b;
+      --text-sub: #475569;
+      --text-muted: #64748b;
+      --border-default: #d6e0ec;
+
+      --warn-bg: #fffbeb;
+      --warn-border: #f59e0b;
+      --warn-text: #78350f;
+
+      --danger-bg: #fef2f2;
+      --danger-border: #dc2626;
+      --danger-text: #7f1d1d;
+
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --shadow-card: 0 2px 10px rgba(14, 58, 108, 0.06);
+      --shadow-sticky-top: 0 3px 14px rgba(9, 38, 74, 0.18);
+      --shadow-sticky-bottom: 0 -4px 20px rgba(9, 38, 74, 0.16);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Yu Gothic", "Meiryo", "Segoe UI", sans-serif;
+      background-color: var(--bg-outer);
+      color: var(--text-main);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* スマホ縦画面（LINEアプリ内ブラウザ）最適化コンテナ */
+    .app-shell {
+      width: 100%;
+      max-width: 500px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background-color: var(--bg-page);
+      box-shadow: 0 0 32px rgba(14, 58, 108, 0.12);
+      display: flex;
+      flex-direction: column;
+      padding-bottom: calc(134px + env(safe-area-inset-bottom, 0px));
+      position: relative;
+    }
+
+    /* ============================================================
+       上部固定ヘッダー（Sticky Header）
+       ============================================================ */
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 45;
+      background: linear-gradient(135deg, var(--ity-navy-deep) 0%, var(--ity-navy) 60%, var(--ity-blue) 100%);
+      color: #ffffff;
+      padding: calc(10px + env(safe-area-inset-top, 0px)) 14px 10px;
+      box-shadow: var(--shadow-sticky-top);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .header-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .header-title {
+      margin: 0;
+      font-size: 0.94rem;
+      font-weight: 800;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      color: #ffffff;
+    }
+
+    .header-title span {
+      display: block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #bae6fd;
+      letter-spacing: 0.04em;
+    }
+
+    .btn-reset {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.36);
+      border-radius: 999px;
+      padding: 8px 12px;
+      min-height: 38px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background-color 0.18s ease, transform 0.1s ease;
+    }
+
+    .btn-reset:hover {
+      background: rgba(255, 255, 255, 0.26);
+    }
+
+    .btn-reset:active {
+      transform: scale(0.96);
+    }
+
+    /* 導入案内バナー */
+    .intro-banner {
+      background: linear-gradient(180deg, #e8f2ff 0%, #f4f8fc 100%);
+      padding: 14px 16px 6px;
+      border-bottom: 1px solid #dce8f6;
+    }
+
+    .intro-text {
+      margin: 0 0 8px;
+      font-size: 0.8rem;
+      color: var(--ity-navy-deep);
+      line-height: 1.5;
+    }
+
+    .tax-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #ffffff;
+      border: 1px solid var(--ity-blue-border);
+      color: var(--ity-navy);
+      border-radius: 8px;
+      padding: 5px 10px;
+      font-size: 0.73rem;
+      font-weight: 700;
+    }
+
+    /* ============================================================
+       メインコンテンツ＆セクションカード
+       ============================================================ */
+    .app-main {
+      padding: 14px 13px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .section-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 17px 15px;
+      border: 1px solid var(--border-default);
+      box-shadow: var(--shadow-card);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .section-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+    }
+
+    .section-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: var(--ity-navy);
+      color: #ffffff;
+      font-size: 0.82rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: var(--ity-navy-deep);
+      line-height: 1.3;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 3px 9px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .badge-single {
+      background: #dbeafe;
+      color: var(--ity-navy);
+    }
+
+    .badge-multi {
+      background: #e2e8f0;
+      color: #475569;
+    }
+
+    .section-desc {
+      margin: 0 0 12px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .sub-group-title {
+      margin: 0 0 10px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--ity-navy);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sub-group-title::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 15px;
+      border-radius: 2px;
+      background: var(--ity-blue);
+    }
+
+    .divider {
+      border: 0;
+      border-top: 1px solid #e6edf6;
+      margin: 18px 0;
+    }
+
+    /* ============================================================
+       選択カード（選択中は明確な青枠＆薄青背景）
+       ============================================================ */
+    .option-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-group-box {
+      border-radius: var(--radius-md);
+      border: 2px solid var(--border-default);
+      background: var(--bg-subtle);
+      overflow: hidden;
+      transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .option-group-box.is-selected {
+      border-color: var(--ity-blue);
+      background: var(--ity-blue-soft);
+      box-shadow: 0 3px 12px rgba(22, 104, 199, 0.14);
+    }
+
+    .choice-card {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 13px;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--border-default);
+      background: var(--bg-subtle);
+      cursor: pointer;
+      text-align: left;
+      font-family: inherit;
+      color: inherit;
+      min-height: 54px;
+      user-select: none;
+      transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+    }
+
+    .choice-card:active {
+      transform: scale(0.99);
+    }
+
+    .choice-card.is-selected {
+      border-color: var(--ity-blue);
+      background: var(--ity-blue-soft);
+      box-shadow: 0 3px 12px rgba(22, 104, 199, 0.14);
+    }
+
+    /* グループ枠内のカードは枠線を親に委譲 */
+    .option-group-box > .choice-card {
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .choice-card-lg {
+      padding: 16px 14px;
+      min-height: 66px;
+    }
+
+    .choice-card-column {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+    }
+
+    .choice-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .choice-left {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .choice-left-center {
+      align-items: center;
+    }
+
+    .sr-input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* カスタムラジオ */
+    .radio-ui {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid #94a3b8;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+      transition: border-color 0.18s ease;
+    }
+
+    .radio-ui::after {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--ity-blue);
+      transform: scale(0);
+      transition: transform 0.16s ease;
+    }
+
+    .is-selected .radio-ui {
+      border-color: var(--ity-blue);
+    }
+
+    .is-selected .radio-ui::after {
+      transform: scale(1);
+    }
+
+    /* カスタムチェックボックス */
+    .check-ui {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      border: 2px solid #94a3b8;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+      color: #ffffff;
+      transition: background-color 0.18s ease, border-color 0.18s ease;
+    }
+
+    .check-ui svg {
+      width: 14px;
+      height: 14px;
+      opacity: 0;
+      transform: scale(0.6);
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+
+    .is-selected .check-ui {
+      background: var(--ity-blue);
+      border-color: var(--ity-blue);
+    }
+
+    .is-selected .check-ui svg {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .choice-text {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .choice-title {
+      display: block;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+
+    .is-selected .choice-title {
+      color: var(--ity-navy-deep);
+    }
+
+    .choice-sub {
+      display: block;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+      line-height: 1.4;
+    }
+
+    .is-selected .choice-sub {
+      color: #2b4c77;
+    }
+
+    .choice-price {
+      text-align: right;
+      flex-shrink: 0;
+      white-space: nowrap;
+      font-weight: 800;
+      color: var(--ity-navy);
+      font-size: 0.95rem;
+    }
+
+    .choice-price-lg {
+      font-size: 1.06rem;
+    }
+
+    .choice-price small {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-sub);
+    }
+
+    /* 室内カバーカード内に常時表示する仕様メモ */
+    .card-inline-spec {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      border-radius: 10px;
+      padding: 9px 11px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      font-size: 0.77rem;
+      color: var(--text-sub);
+      line-height: 1.45;
+      transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .is-selected .card-inline-spec {
+      border-color: var(--ity-blue-border);
+      background: #ffffff;
+      color: var(--ity-navy-deep);
+      font-weight: 700;
+    }
+
+    .card-inline-spec svg {
+      width: 16px;
+      height: 16px;
+      color: var(--ity-blue);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* ============================================================
+       条件分岐パネル（CSS Gridで滑らかに開閉）
+       ============================================================ */
+    .branch-wrap {
+      display: grid;
+      grid-template-rows: 0fr;
+      opacity: 0;
+      transition: grid-template-rows 0.26s ease, opacity 0.22s ease;
+      pointer-events: none;
+    }
+
+    .branch-wrap.is-open {
+      grid-template-rows: 1fr;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .branch-inner {
+      overflow: hidden;
+    }
+
+    .branch-panel {
+      padding: 12px 13px 14px;
+      border-top: 1px dashed #cbd5e1;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .branch-standalone {
+      margin-top: 10px;
+      border-radius: var(--radius-md);
+      border: 1.5px solid var(--ity-blue-border);
+      background: #f8fbff;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .branch-q-title {
+      margin: 0 0 8px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--ity-navy);
+    }
+
+    /* 分岐質問用ボタングリッド */
+    .pill-grid {
+      display: grid;
+      gap: 8px;
+    }
+
+    .pill-grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .pill-grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .pill-option {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-align: center;
+      padding: 10px 8px;
+      min-height: 44px;
+      border-radius: var(--radius-sm);
+      border: 2px solid var(--border-default);
+      background: #ffffff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-sub);
+      cursor: pointer;
+      line-height: 1.25;
+      user-select: none;
+      transition: all 0.16s ease;
+    }
+
+    .pill-option.is-selected {
+      border-color: var(--ity-blue);
+      background: var(--ity-blue);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(22, 104, 199, 0.22);
+    }
+
+    .pill-option.is-danger.is-selected {
+      border-color: var(--danger-border);
+      background: var(--danger-border);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.22);
+    }
+
+    .pill-option.is-warn.is-selected {
+      border-color: #d97706;
+      background: #d97706;
+      color: #ffffff;
+    }
+
+    /* 化粧カバー色見本ドット */
+    .color-dot {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      border: 1px solid rgba(15, 23, 42, 0.28);
+      flex-shrink: 0;
+    }
+
+    .is-selected .color-dot {
+      border-color: rgba(255, 255, 255, 0.85);
+    }
+
+    /* ============================================================
+       案内・注意・警告ボックス（青／黄／赤）
+       ============================================================ */
+    .notice-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      border-radius: 12px;
+      padding: 11px 12px;
+      font-size: 0.78rem;
+      line-height: 1.55;
+    }
+
+    .notice-box svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .notice-info {
+      margin-top: 12px;
+      background: var(--ity-blue-soft);
+      border: 1px solid var(--ity-blue-border);
+      color: #1e40af;
+    }
+
+    .notice-warn {
+      background: var(--warn-bg);
+      border: 1.5px solid var(--warn-border);
+      color: var(--warn-text);
+    }
+
+    .notice-danger {
+      margin-top: 10px;
+      background: var(--danger-bg);
+      border: 2px solid var(--danger-border);
+      color: var(--danger-text);
+      font-weight: 700;
+    }
+
+    /* 専用回路工事の常時表示注意書きボックス（選択時は強調表示） */
+    .circuit-note-box {
+      margin-top: 12px;
+      border-radius: 13px;
+      padding: 13px 13px;
+      background: #f8fafd;
+      border: 1.5px solid #cbd5e1;
+      color: var(--text-sub);
+      font-size: 0.78rem;
+      line-height: 1.55;
+      transition: background-color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .circuit-note-box.is-highlighted {
+      background: #fffbeb;
+      border: 2px solid var(--warn-border);
+      color: var(--warn-text);
+      box-shadow: 0 3px 12px rgba(245, 158, 11, 0.16);
+    }
+
+    .circuit-note-head {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--ity-navy);
+      margin-bottom: 8px;
+    }
+
+    .circuit-note-box.is-highlighted .circuit-note-head {
+      color: #92400e;
+    }
+
+    .circuit-note-head svg {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+    }
+
+    .circuit-note-list {
+      margin: 0 0 8px;
+      padding-left: 1.15em;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .circuit-note-list li strong {
+      color: var(--ity-navy-deep);
+    }
+
+    .circuit-note-box.is-highlighted .circuit-note-list li strong {
+      color: #92400e;
+    }
+
+    .circuit-note-foot {
+      margin: 0;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      padding-top: 7px;
+      border-top: 1px dashed #cbd5e1;
+    }
+
+    .circuit-note-box.is-highlighted .circuit-note-foot {
+      color: #92400e;
+      border-top-color: #fcd34d;
+    }
+
+    .pill-span-full {
+      grid-column: 1 / -1;
+    }
+
+    /* RKC公式リンクボタン（黄色い注意ボックス内） */
+    .recycle-box-content {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .recycle-box-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .btn-rkc-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      padding: 12px 14px;
+      min-height: 46px;
+      border-radius: 10px;
+      background: #ffffff;
+      border: 2px solid #d97706;
+      color: #92400e;
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 2px 6px rgba(217, 119, 6, 0.14);
+      text-align: center;
+      line-height: 1.35;
+      transition: background-color 0.16s ease, transform 0.1s ease;
+    }
+
+    .btn-rkc-link:hover {
+      background: #fef3c7;
+    }
+
+    .btn-rkc-link:active {
+      transform: scale(0.98);
+    }
+
+    /* ============================================================
+       配管延長ステッパー（0m〜10m）
+       ============================================================ */
+    .stepper-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--border-default);
+      background: var(--bg-subtle);
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .stepper-box.is-selected {
+      border-color: var(--ity-blue);
+      background: var(--ity-blue-soft);
+    }
+
+    .btn-step {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      border: 1.5px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--ity-navy);
+      font-size: 1.45rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: transform 0.1s ease, background-color 0.15s ease;
+    }
+
+    .btn-step-plus {
+      background: var(--ity-blue);
+      border-color: var(--ity-blue);
+      color: #ffffff;
+    }
+
+    .btn-step:active:not(:disabled) {
+      transform: scale(0.93);
+    }
+
+    .btn-step:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .stepper-readout {
+      text-align: center;
+      flex: 1;
+    }
+
+    .stepper-meter {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--ity-navy-deep);
+      line-height: 1.1;
+    }
+
+    .stepper-meter span {
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-left: 2px;
+    }
+
+    .stepper-cost {
+      margin: 4px 0 0;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .stepper-box.is-selected .stepper-cost {
+      color: var(--ity-blue);
+    }
+
+    /* ============================================================
+       選択内容の内訳・概算合計カード
+       ============================================================ */
+    .summary-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 18px 15px;
+      border: 2px solid var(--ity-blue-border);
+      box-shadow: 0 4px 16px rgba(14, 58, 108, 0.08);
+    }
+
+    .breakdown-list {
+      list-style: none;
+      margin: 10px 0 14px;
+      padding: 0;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .breakdown-item {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 0.85rem;
+    }
+
+    .breakdown-empty {
+      padding: 14px 0;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .breakdown-name {
+      font-weight: 700;
+      color: var(--text-main);
+      margin: 0;
+    }
+
+    .breakdown-sub {
+      font-size: 0.73rem;
+      color: var(--text-muted);
+      margin: 2px 0 0;
+    }
+
+    .breakdown-price {
+      font-weight: 800;
+      color: var(--ity-navy);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .total-panel {
+      background: linear-gradient(135deg, #edf5ff 0%, #dfeeff 100%);
+      border: 1.5px solid var(--ity-blue-border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+    }
+
+    .total-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.84rem;
+      color: var(--text-sub);
+      margin-bottom: 5px;
+    }
+
+    .total-row-main {
+      margin: 10px 0 0;
+      padding-top: 10px;
+      border-top: 1px solid rgba(22, 104, 199, 0.25);
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .total-main-label {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: var(--ity-navy-deep);
+    }
+
+    .total-main-amount {
+      font-size: 1.72rem;
+      font-weight: 800;
+      color: var(--ity-navy-deep);
+      letter-spacing: -0.02em;
+    }
+
+    .total-main-amount small {
+      font-size: 0.9rem;
+      margin-left: 2px;
+    }
+
+    .recycle-badge-inline {
+      display: none;
+      margin-top: 8px;
+      text-align: right;
+    }
+
+    .recycle-badge-inline.is-visible {
+      display: block;
+    }
+
+    .recycle-badge-pill {
+      display: inline-block;
+      background: #fffbeb;
+      color: #b45309;
+      border: 1.5px solid #f59e0b;
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 0.74rem;
+      font-weight: 800;
+    }
+
+    .footer-note {
+      text-align: center;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      padding: 6px 8px 12px;
+      line-height: 1.6;
+    }
+
+    /* ============================================================
+       最下部 固定サマリーバー（リアルタイム金額＆LINEコピーCTA）
+       ============================================================ */
+    .sticky-footer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 40;
+      pointer-events: none;
+    }
+
+    .sticky-footer-inner {
+      max-width: 500px;
+      margin: 0 auto;
+      background: rgba(9, 38, 74, 0.97);
+      backdrop-filter: blur(8px);
+      color: #ffffff;
+      padding: 10px 13px calc(12px + env(safe-area-inset-bottom, 0px));
+      border-top: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: var(--shadow-sticky-bottom);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      pointer-events: auto;
+    }
+
+    .sticky-price-col {
+      min-width: 0;
+      text-decoration: none;
+      color: inherit;
+      flex: 1;
+    }
+
+    .sticky-sub-line {
+      font-size: 0.71rem;
+      color: #cbd5e1;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .sticky-main-line {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 5px;
+      line-height: 1.15;
+      margin-top: 2px;
+    }
+
+    .sticky-label {
+      font-size: 0.7rem;
+      color: #bae6fd;
+      font-weight: 700;
+    }
+
+    .sticky-total-val {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+    }
+
+    .sticky-total-val small {
+      font-size: 0.76rem;
+      margin-left: 2px;
+    }
+
+    .sticky-recycle-badge {
+      display: none;
+      margin-top: 4px;
+      background: #f59e0b;
+      color: #451a03;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 999px;
+      white-space: nowrap;
+      width: fit-content;
+    }
+
+    .sticky-recycle-badge.is-visible {
+      display: inline-block;
+    }
+
+    .btn-line-copy {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: var(--line-green);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 13px 14px;
+      min-height: 48px;
+      font-size: 0.84rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(6, 199, 85, 0.35);
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background-color 0.16s ease, transform 0.1s ease;
+    }
+
+    .btn-line-copy:hover {
+      background: var(--line-green-dark);
+    }
+
+    .btn-line-copy:active {
+      transform: scale(0.96);
+    }
+
+    .btn-line-copy svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       トースト通知（alert不使用）
+       ============================================================ */
+    .toast {
+      position: fixed;
+      top: 66px;
+      left: 50%;
+      transform: translate(-50%, -14px);
+      z-index: 65;
+      width: calc(100% - 28px);
+      max-width: 460px;
+      background: #0f172a;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 14px;
+      padding: 12px 14px;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.35);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 0.81rem;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+
+    .toast.is-show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .toast svg {
+      width: 20px;
+      height: 20px;
+      color: var(--line-green);
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       コピー内容プレビューモーダル
+       ============================================================ */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 55;
+      background: rgba(9, 25, 48, 0.62);
+      backdrop-filter: blur(3px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-backdrop.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-dialog {
+      width: 100%;
+      max-width: 450px;
+      max-height: 86vh;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 20px 44px rgba(9, 25, 48, 0.32);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: translateY(10px) scale(0.98);
+      transition: transform 0.2s ease;
+    }
+
+    .modal-backdrop.is-open .modal-dialog {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-header {
+      background: var(--ity-navy);
+      color: #ffffff;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .modal-title {
+      margin: 0;
+      font-size: 0.94rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .modal-close-x {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+      font-size: 1.2rem;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-body {
+      padding: 14px 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .modal-guide {
+      margin: 0;
+      font-size: 0.8rem;
+      color: var(--ity-navy);
+      background: var(--ity-blue-soft);
+      border: 1px solid var(--ity-blue-border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .modal-textarea {
+      width: 100%;
+      min-height: 230px;
+      border: 1.5px solid var(--border-default);
+      border-radius: 12px;
+      padding: 12px;
+      font-family: inherit;
+      font-size: 0.78rem;
+      line-height: 1.6;
+      color: var(--text-main);
+      background: #f8fafd;
+      resize: none;
+    }
+
+    .modal-footer {
+      padding: 12px 16px 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .btn-modal-secondary {
+      padding: 12px;
+      min-height: 46px;
+      border-radius: 12px;
+      border: 1.5px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--text-sub);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-modal-primary {
+      padding: 12px;
+      min-height: 46px;
+      border-radius: 12px;
+      border: none;
+      background: var(--line-green);
+      color: #ffffff;
+      font-size: 0.85rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    /* 極小画面向けの微調整 */
+    @media (max-width: 360px) {
+      .header-title {
+        font-size: 0.85rem;
+      }
+      .sticky-total-val {
+        font-size: 1.15rem;
+      }
+      .btn-line-copy {
+        padding: 11px 10px;
+        font-size: 0.77rem;
+      }
+      .pill-grid-3 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+
+    <!-- ==================== 上部固定ヘッダー ==================== -->
+    <header class="sticky-header">
+      <div class="header-brand">
+        <div class="header-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+        </div>
+        <h1 class="header-title">
+          <span>ITY電気 公式見積り</span>
+          ITY電気 エアコン工事 料金シミュレーター
+        </h1>
+      </div>
+      <button type="button" id="resetAllBtn" class="btn-reset" aria-label="選択内容をすべてリセット">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="1 4 1 10 7 10"></polyline>
+          <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+        </svg>
+        <span>すべてリセット</span>
+      </button>
+    </header>
+
+    <!-- 導入説明エリア -->
+    <div class="intro-banner">
+      <p class="intro-text">ご希望の工事項目をタップすると、概算金額をリアルタイムで計算します。わからない項目は未選択のままご相談いただけます。</p>
+      <div class="tax-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+        <span>各項目の金額はすべて税別表記（合計時に消費税10%を自動計算）</span>
+      </div>
+    </div>
+
+    <!-- ==================== メインフォーム ==================== -->
+    <main class="app-main">
+
+      <!-- ============================================================
+           1. 標準取付工事（単一選択・再タップで解除可能）
+           ============================================================ -->
+      <section class="section-card" aria-labelledby="sec1Title">
+        <div class="section-head">
+          <div class="section-title-wrap">
+            <span class="section-num">1</span>
+            <h2 class="section-title" id="sec1Title">標準取付工事</h2>
+          </div>
+          <span class="badge badge-single">1つ選択・解除可</span>
+        </div>
+        <p class="section-desc">エアコンの能力（畳数目安）をお選びください。選択中をもう一度タップすると解除できます。</p>
+
+        <div class="option-list" role="radiogroup" aria-label="標準取付工事">
+          <button type="button" class="choice-card choice-card-lg is-selected" data-std-btn="3.6" data-price="15000" data-label="標準取付工事（3.6kW以下／〜12畳目安）" role="radio" aria-checked="true">
+            <div class="choice-left choice-left-center">
+              <span class="radio-ui" aria-hidden="true"></span>
+              <div class="choice-text">
+                <span class="choice-title">3.6kW以下（〜12畳目安）</span>
+                <span class="choice-sub">寝室・子ども部屋・一般居室向け</span>
+              </div>
+            </div>
+            <div class="choice-price choice-price-lg">15,000<small>円</small></div>
+          </button>
+
+          <button type="button" class="choice-card choice-card-lg" data-std-btn="4.0-7.1" data-price="20000" data-label="標準取付工事（4.0kW〜7.1kW／14〜23畳目安）" role="radio" aria-checked="false">
+            <div class="choice-left choice-left-center">
+              <span class="radio-ui" aria-hidden="true"></span>
+              <div class="choice-text">
+                <span class="choice-title">4.0kW〜7.1kW（14〜23畳目安）</span>
+                <span class="choice-sub">リビング・広めのお部屋向け</span>
+              </div>
+            </div>
+            <div class="choice-price choice-price-lg">20,000<small>円</small></div>
+          </button>
+
+          <button type="button" class="choice-card choice-card-lg" data-std-btn="8.0+" data-price="24000" data-label="標準取付工事（8.0kW以上）" role="radio" aria-checked="false">
+            <div class="choice-left choice-left-center">
+              <span class="radio-ui" aria-hidden="true"></span>
+              <div class="choice-text">
+                <span class="choice-title">8.0kW以上</span>
+                <span class="choice-sub">大型機種・広いLDK向け</span>
+              </div>
+            </div>
+            <div class="choice-price choice-price-lg">24,000<small>円</small></div>
+          </button>
+        </div>
+
+        <div class="notice-box notice-info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          <span>※大型機種など『2分4分配管』を使用するエアコンは、型番を確認のうえ事前にお見積りをご案内いたします。</span>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           2. 特殊設置・配管工事（複数チェック可能）
+           ============================================================ -->
+      <section class="section-card" aria-labelledby="sec2Title">
+        <div class="section-head">
+          <div class="section-title-wrap">
+            <span class="section-num">2</span>
+            <h2 class="section-title" id="sec2Title">特殊設置・配管工事</h2>
+          </div>
+          <span class="badge badge-multi">複数選択可</span>
+        </div>
+        <p class="section-desc">当てはまる設置方法がある場合のみチェックしてください。</p>
+
+        <div class="option-list">
+          <label class="choice-card" data-check-card>
+            <input type="checkbox" class="sr-input special-opt" value="12000" data-label="2階 → 1階工事" />
+            <div class="choice-left choice-left-center">
+              <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+              <span class="choice-title">2階 → 1階工事</span>
+            </div>
+            <div class="choice-price">+12,000<small>円</small></div>
+          </label>
+
+          <label class="choice-card" data-check-card>
+            <input type="checkbox" class="sr-input special-opt" value="18000" data-label="3階 → 1階工事" />
+            <div class="choice-left choice-left-center">
+              <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+              <span class="choice-title">3階 → 1階工事</span>
+            </div>
+            <div class="choice-price">+18,000<small>円</small></div>
+          </label>
+
+          <label class="choice-card" data-check-card>
+            <input type="checkbox" class="sr-input special-opt" value="12000" data-label="屋根置き工事（1階屋根）" />
+            <div class="choice-left choice-left-center">
+              <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+              <span class="choice-title">屋根置き工事（1階屋根）</span>
+            </div>
+            <div class="choice-price">+12,000<small>円</small></div>
+          </label>
+
+          <label class="choice-card" data-check-card>
+            <input type="checkbox" class="sr-input special-opt" value="8000" data-label="サービスバルコニー工事" />
+            <div class="choice-left choice-left-center">
+              <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+              <span class="choice-title">サービスバルコニー工事</span>
+            </div>
+            <div class="choice-price">+8,000<small>円</small></div>
+          </label>
+
+          <label class="choice-card" data-check-card>
+            <input type="checkbox" class="sr-input special-opt" value="12000" data-label="公団吊り（天吊り）工事" />
+            <div class="choice-left choice-left-center">
+              <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+              <span class="choice-title">公団吊り（天吊り）工事</span>
+            </div>
+            <div class="choice-price">+12,000<small>円</small></div>
+          </label>
+
+          <!-- 室外機 壁面設置工事（条件分岐付き） -->
+          <div class="option-group-box" id="groupWallMount">
+            <label class="choice-card">
+              <input type="checkbox" id="chkWallMount" class="sr-input special-opt" value="12000" data-label="室外機 壁面設置工事" />
+              <div class="choice-left choice-left-center">
+                <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                <span class="choice-title">室外機 壁面設置工事</span>
+              </div>
+              <div class="choice-price">+12,000<small>円</small></div>
+            </label>
+
+            <!-- 条件分岐：壁面設置チェック時のみ展開 -->
+            <div class="branch-wrap" id="branchWallMount" aria-hidden="true">
+              <div class="branch-inner">
+                <div class="branch-panel">
+                  <div>
+                    <p class="branch-q-title">外壁の材質をお選びください</p>
+                    <div class="pill-grid pill-grid-2" role="radiogroup" aria-label="外壁の材質">
+                      <label class="pill-option" data-pill-for="wallMaterial">
+                        <input type="radio" name="wallMaterial" value="木造・サイディング" class="sr-input" />
+                        <span>木造・サイディング</span>
+                      </label>
+                      <label class="pill-option is-warn" data-pill-for="wallMaterial">
+                        <input type="radio" name="wallMaterial" value="ALC" class="sr-input" />
+                        <span>ALC</span>
+                      </label>
+                      <label class="pill-option is-warn" data-pill-for="wallMaterial">
+                        <input type="radio" name="wallMaterial" value="漆喰" class="sr-input" />
+                        <span>漆喰</span>
+                      </label>
+                      <label class="pill-option" data-pill-for="wallMaterial">
+                        <input type="radio" name="wallMaterial" value="タイル・コンクリート" class="sr-input" />
+                        <span>タイル・コンクリート</span>
+                      </label>
+                      <label class="pill-option pill-span-full is-selected" data-pill-for="wallMaterial">
+                        <input type="radio" name="wallMaterial" value="わからない" class="sr-input" checked />
+                        <span>わからない</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div class="notice-box notice-warn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                      <line x1="12" y1="9" x2="12" y2="13"></line>
+                      <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    <span>外壁強度が弱い場合（ALC・漆喰など）は工事不可となる場合があります。</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <label class="choice-card" data-check-card>
+            <input type="checkbox" class="sr-input special-opt" value="25000" data-label="2段置き架台工事" />
+            <div class="choice-left choice-left-center">
+              <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+              <span class="choice-title">2段置き架台工事</span>
+            </div>
+            <div class="choice-price">+25,000<small>円</small></div>
+          </label>
+
+          <label class="choice-card" data-check-card>
+            <input type="checkbox" class="sr-input special-opt" value="7000" data-label="各特殊架台の再利用工事" />
+            <div class="choice-left choice-left-center">
+              <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+              <span class="choice-title">各特殊架台の再利用工事</span>
+            </div>
+            <div class="choice-price">+7,000<small>円</small></div>
+          </label>
+
+          <!-- 隠蔽配管の再利用工事（条件分岐付き） -->
+          <div class="option-group-box" id="groupConcealed">
+            <label class="choice-card">
+              <input type="checkbox" id="chkConcealed" class="sr-input special-opt" value="8000" data-label="隠蔽配管の再利用工事" />
+              <div class="choice-left choice-left-center">
+                <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                <span class="choice-title">隠蔽配管の再利用工事</span>
+              </div>
+              <div class="choice-price">+8,000<small>円</small></div>
+            </label>
+
+            <div class="branch-wrap" id="branchConcealed" aria-hidden="true">
+              <div class="branch-inner">
+                <div class="branch-panel">
+                  <div class="notice-box notice-warn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                      <line x1="12" y1="9" x2="12" y2="13"></line>
+                      <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    <span>排水の安全確保ができない場合、電源ケーブルが2.0mm以外（1.6mm等）や長さ不足の場合は対応不可・別途対応となる場合があります。</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           3. 化粧カバー（屋外70mm・室内）
+           ============================================================ -->
+      <section class="section-card" aria-labelledby="sec3Title">
+        <div class="section-head">
+          <div class="section-title-wrap">
+            <span class="section-num">3</span>
+            <h2 class="section-title" id="sec3Title">化粧カバー</h2>
+          </div>
+        </div>
+
+        <!-- 屋外化粧カバー（70mm） -->
+        <p class="sub-group-title">屋外化粧カバー（70mm）</p>
+        <div class="option-list" role="radiogroup" aria-label="屋外化粧カバー（70mm）">
+          <label class="choice-card is-selected" data-card-for="outdoorCover">
+            <input type="radio" name="outdoorCover" value="none" data-price="0" data-label="不要（標準のテープ巻き仕上げ）" class="sr-input" checked />
+            <div class="choice-left choice-left-center">
+              <span class="radio-ui" aria-hidden="true"></span>
+              <span class="choice-title">不要（標準のテープ巻き仕上げ）</span>
+            </div>
+            <div class="choice-price">0<small>円</small></div>
+          </label>
+
+          <label class="choice-card" data-card-for="outdoorCover">
+            <input type="radio" name="outdoorCover" value="new_basic" data-price="4500" data-label="屋外化粧カバー：配管カバー70（基本）" class="sr-input" />
+            <div class="choice-left choice-left-center">
+              <span class="radio-ui" aria-hidden="true"></span>
+              <span class="choice-title">配管カバー70（基本）</span>
+            </div>
+            <div class="choice-price">+4,500<small>円</small></div>
+          </label>
+
+          <label class="choice-card" data-card-for="outdoorCover">
+            <input type="radio" name="outdoorCover" value="new_2f1f" data-price="12000" data-label="屋外化粧カバー：配管カバー（2階→1階）" class="sr-input" />
+            <div class="choice-left choice-left-center">
+              <span class="radio-ui" aria-hidden="true"></span>
+              <span class="choice-title">配管カバー（2階→1階）</span>
+            </div>
+            <div class="choice-price">+12,000<small>円</small></div>
+          </label>
+
+          <label class="choice-card" data-card-for="outdoorCover">
+            <input type="radio" name="outdoorCover" value="reuse_same" data-price="3000" data-label="既存化粧カバー再利用（同一階）" class="sr-input" />
+            <div class="choice-left">
+              <span class="radio-ui" aria-hidden="true"></span>
+              <div class="choice-text">
+                <span class="choice-title">既存化粧カバー再利用（同一階）</span>
+                <span class="choice-sub">ペンキ等で脱着困難でない場合</span>
+              </div>
+            </div>
+            <div class="choice-price">+3,000<small>円</small></div>
+          </label>
+
+          <label class="choice-card" data-card-for="outdoorCover">
+            <input type="radio" name="outdoorCover" value="reuse_2f1f" data-price="5000" data-label="既存化粧カバー再利用（2階→1階）" class="sr-input" />
+            <div class="choice-left">
+              <span class="radio-ui" aria-hidden="true"></span>
+              <div class="choice-text">
+                <span class="choice-title">既存化粧カバー再利用（2階→1階）</span>
+                <span class="choice-sub">ペンキ等で脱着困難でない場合</span>
+              </div>
+            </div>
+            <div class="choice-price">+5,000<small>円</small></div>
+          </label>
+        </div>
+
+        <!-- 条件分岐A：「新規」選択時にカラー選択パネルを展開 -->
+        <div class="branch-wrap" id="branchCoverNew" aria-hidden="true">
+          <div class="branch-inner">
+            <div class="branch-standalone">
+              <div>
+                <p class="branch-q-title">ご希望のカラーをお選びください</p>
+                <div class="pill-grid pill-grid-3" role="radiogroup" aria-label="屋外化粧カバーの色">
+                  <label class="pill-option is-selected" data-pill-for="coverColor">
+                    <input type="radio" name="coverColor" value="アイボリー" class="sr-input" checked />
+                    <span class="color-dot" style="background:#f3ecd8;" aria-hidden="true"></span>
+                    <span>アイボリー</span>
+                  </label>
+                  <label class="pill-option" data-pill-for="coverColor">
+                    <input type="radio" name="coverColor" value="ホワイト" class="sr-input" />
+                    <span class="color-dot" style="background:#ffffff;" aria-hidden="true"></span>
+                    <span>ホワイト</span>
+                  </label>
+                  <label class="pill-option" data-pill-for="coverColor">
+                    <input type="radio" name="coverColor" value="ブラウン" class="sr-input" />
+                    <span class="color-dot" style="background:#6b4423;" aria-hidden="true"></span>
+                    <span>ブラウン</span>
+                  </label>
+                  <label class="pill-option" data-pill-for="coverColor">
+                    <input type="radio" name="coverColor" value="ブラック" class="sr-input" />
+                    <span class="color-dot" style="background:#1e293b;" aria-hidden="true"></span>
+                    <span>ブラック</span>
+                  </label>
+                  <label class="pill-option" data-pill-for="coverColor">
+                    <input type="radio" name="coverColor" value="グレー" class="sr-input" />
+                    <span class="color-dot" style="background:#94a3b8;" aria-hidden="true"></span>
+                    <span>グレー</span>
+                  </label>
+                  <label class="pill-option" data-pill-for="coverColor">
+                    <input type="radio" name="coverColor" value="当日相談・おまかせ" class="sr-input" />
+                    <span>当日相談・おまかせ</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 条件分岐B：「既存カバー再利用」選択時に外壁塗装・劣化の質問を展開 -->
+        <div class="branch-wrap" id="branchCoverReuse" aria-hidden="true">
+          <div class="branch-inner">
+            <div class="branch-standalone">
+              <div>
+                <p class="branch-q-title">1）外壁塗装をしたことはありますか？</p>
+                <div class="pill-grid pill-grid-3" role="radiogroup" aria-label="外壁塗装の有無">
+                  <label class="pill-option is-danger" data-pill-for="wallPaint">
+                    <input type="radio" name="wallPaint" value="あり" class="sr-input" />
+                    <span>あり</span>
+                  </label>
+                  <label class="pill-option is-selected" data-pill-for="wallPaint">
+                    <input type="radio" name="wallPaint" value="なし" class="sr-input" checked />
+                    <span>なし</span>
+                  </label>
+                  <label class="pill-option" data-pill-for="wallPaint">
+                    <input type="radio" name="wallPaint" value="わからない" class="sr-input" />
+                    <span>わからない</span>
+                  </label>
+                </div>
+
+                <!-- 外壁塗装「あり」選択時の赤色警告ボックス -->
+                <div class="branch-wrap" id="alertWallPaint" aria-hidden="true">
+                  <div class="branch-inner">
+                    <div class="notice-box notice-danger">
+                      <span>⚠️ ※外壁塗装時にカバーが塗膜で固着している場合、再利用できない・取り外し時に塗装が剥がれる恐れがあります。</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <p class="branch-q-title">2）カバーの割れ・劣化はありますか？</p>
+                <div class="pill-grid pill-grid-3" role="radiogroup" aria-label="カバーの割れ・劣化">
+                  <label class="pill-option is-selected" data-pill-for="coverDamage">
+                    <input type="radio" name="coverDamage" value="なさそう" class="sr-input" checked />
+                    <span>なさそう</span>
+                  </label>
+                  <label class="pill-option is-warn" data-pill-for="coverDamage">
+                    <input type="radio" name="coverDamage" value="割れ・劣化あり" class="sr-input" />
+                    <span>割れ・劣化あり</span>
+                  </label>
+                  <label class="pill-option" data-pill-for="coverDamage">
+                    <input type="radio" name="coverDamage" value="わからない" class="sr-input" />
+                    <span>わからない</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- 室内化粧カバー（標準・独立チェックカード／カード内に常時仕様表示） -->
+        <p class="sub-group-title">室内化粧カバー</p>
+        <label class="choice-card choice-card-column" data-check-card>
+          <input type="checkbox" id="chkIndoorCover" class="sr-input" value="10000" data-label="室内化粧カバー（標準）" />
+          <div class="choice-card-top">
+            <div class="choice-left choice-left-center">
+              <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+              <span class="choice-title">室内化粧カバー（標準）</span>
+            </div>
+            <div class="choice-price">+10,000<small>円</small></div>
+          </div>
+          <div class="card-inline-spec">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            <span>セット内容：ヘッド（頭）・ストレート1m・曲がり1箇所・断熱処理1mまで含む</span>
+          </div>
+        </label>
+      </section>
+
+      <!-- ============================================================
+           4. 配管延長
+           ============================================================ -->
+      <section class="section-card" aria-labelledby="sec4Title">
+        <div class="section-head">
+          <div class="section-title-wrap">
+            <span class="section-num">4</span>
+            <h2 class="section-title" id="sec4Title">配管延長</h2>
+          </div>
+        </div>
+        <p class="section-desc">標準配管4mを超える場合の延長メートル数（1mあたり 3,500円）</p>
+
+        <div class="stepper-box" id="pipeStepperBox">
+          <button type="button" id="pipeMinusBtn" class="btn-step" aria-label="延長メートル数を1m減らす" disabled>−</button>
+          <div class="stepper-readout">
+            <div class="stepper-meter"><strong id="pipeMeterValue">0</strong><span>m</span></div>
+            <p class="stepper-cost" id="pipeCostValue">延長なし（0円）</p>
+          </div>
+          <button type="button" id="pipePlusBtn" class="btn-step btn-step-plus" aria-label="延長メートル数を1m増やす">＋</button>
+        </div>
+
+        <div class="notice-box notice-info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          <span>※標準工事（配管4mまで）を超える場合の延長分です。大型機種など『2分4分配管』が必要な機種は、型番を確認のうえ事前にお見積りをご案内いたします。</span>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           5. 既存エアコンの取り外し・処分
+           ============================================================ -->
+      <section class="section-card" aria-labelledby="sec5Title">
+        <div class="section-head">
+          <div class="section-title-wrap">
+            <span class="section-num">5</span>
+            <h2 class="section-title" id="sec5Title">既存エアコンの取り外し・処分</h2>
+          </div>
+          <span class="badge badge-multi">複数選択可</span>
+        </div>
+
+        <div class="option-list">
+          <label class="choice-card" data-check-card>
+            <input type="checkbox" id="chkRemove" class="sr-input" value="6000" data-label="標準取り外し（入れ替え時）" />
+            <div class="choice-left choice-left-center">
+              <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+              <span class="choice-title">標準取り外し（入れ替え時）</span>
+            </div>
+            <div class="choice-price">+6,000<small>円</small></div>
+          </label>
+
+          <!-- 処分費（収集運搬料）＋RKC公式リンク条件分岐 -->
+          <div class="option-group-box" id="groupDisposal">
+            <label class="choice-card">
+              <input type="checkbox" id="chkDisposal" class="sr-input" value="1000" data-label="処分費（収集運搬料）" />
+              <div class="choice-left choice-left-center">
+                <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                <span class="choice-title">処分費（収集運搬料）</span>
+              </div>
+              <div class="choice-price">+1,000<small>円</small></div>
+            </label>
+
+            <div class="branch-wrap" id="branchDisposal" aria-hidden="true">
+              <div class="branch-inner">
+                <div class="branch-panel">
+                  <div class="notice-box notice-warn">
+                    <div class="recycle-box-content">
+                      <div class="recycle-box-head">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                          <line x1="12" y1="9" x2="12" y2="13"></line>
+                          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        <span>別途、国が定めた法定の家電リサイクル料金がかかります（メーカーによって金額が異なります）。</span>
+                      </div>
+
+                      <a
+                        href="https://www.rkc.aeha.or.jp/recycle_price_compact.html"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn-rkc-link"
+                      >
+                        <span>メーカー別の法定リサイクル料金を調べる（RKC公式）↗</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           6. 電源・コンセント周り
+           ============================================================ -->
+      <section class="section-card" aria-labelledby="sec6Title">
+        <div class="section-head">
+          <div class="section-title-wrap">
+            <span class="section-num">6</span>
+            <h2 class="section-title" id="sec6Title">電源・コンセント周り</h2>
+          </div>
+        </div>
+
+        <!-- 専用回路工事（単一選択・再タップで選択解除可能） -->
+        <div class="section-head" style="margin-bottom:8px;">
+          <p class="sub-group-title" style="margin:0;">専用回路工事</p>
+          <span class="badge badge-single">1つ選択・解除可</span>
+        </div>
+        <p class="section-desc">専用コンセントがない場合にお選びください（選択中を再タップで解除）。</p>
+
+        <div class="option-list" role="radiogroup" aria-label="専用回路工事">
+          <button type="button" class="choice-card" data-circuit-btn="same" data-price="15000" data-label="専用回路工事（同一階／長さ10mまで）" role="radio" aria-checked="false">
+            <div class="choice-left">
+              <span class="radio-ui" aria-hidden="true"></span>
+              <div class="choice-text">
+                <span class="choice-title">専用回路工事（同一階／長さ10mまで）</span>
+                <span class="choice-sub">ブレーカーと同じ階への専用配線（基本長さ10mまで）</span>
+              </div>
+            </div>
+            <div class="choice-price">+15,000<small>円</small></div>
+          </button>
+
+          <button type="button" class="choice-card" data-circuit-btn="diff" data-price="25000" data-label="専用回路工事（2階⇔1階／長さ20mまで）" role="radio" aria-checked="false">
+            <div class="choice-left">
+              <span class="radio-ui" aria-hidden="true"></span>
+              <div class="choice-text">
+                <span class="choice-title">専用回路工事（2階⇔1階／長さ20mまで）</span>
+                <span class="choice-sub">ブレーカーが1階にあり、2階へ専用回路を引く場合など</span>
+              </div>
+            </div>
+            <div class="choice-price">+25,000<small>円</small></div>
+          </button>
+        </div>
+
+        <!-- 専用回路工事に関する常時表示の注意書きボックス（専用回路選択時は強調表示） -->
+        <div class="circuit-note-box" id="circuitNoteBox">
+          <div class="circuit-note-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <span>専用回路工事の追加費用について（現地確認項目）</span>
+          </div>
+          <ul class="circuit-note-list">
+            <li><strong>配線延長：</strong>基本の長さ（同一階10m／2階⇔1階20m）を超える場合、1m延長ごとに <strong>＋1,000円（税別）</strong> ※同一階・2階⇔1階共通</li>
+            <li><strong>隠蔽配線：</strong>屋根裏や床下を通して配線する必要がある場合、<strong>＋4,000円（税別）</strong></li>
+          </ul>
+          <p class="circuit-note-foot">※屋根裏・床下を通す必要があるかや実際の配線長さは、お客様側でのご判断が難しいため、現地状況を確認のうえ作業前にご説明・お見積りいたします。</p>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- 追加チェックボックス（電圧切替・コンセント交換） -->
+        <p class="sub-group-title">電圧切替・コンセント交換</p>
+        <div class="option-list">
+          <label class="choice-card" data-check-card>
+            <input type="checkbox" id="chkVoltage" class="sr-input" value="4000" data-label="電圧切替（100V⇔200V）" />
+            <div class="choice-left choice-left-center">
+              <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+              <span class="choice-title">電圧切替（100V⇔200V）</span>
+            </div>
+            <div class="choice-price">+4,000<small>円</small></div>
+          </label>
+
+          <label class="choice-card" data-check-card>
+            <input type="checkbox" id="chkOutlet" class="sr-input" value="2000" data-label="コンセント交換" />
+            <div class="choice-left choice-left-center">
+              <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+              <span class="choice-title">コンセント交換</span>
+            </div>
+            <div class="choice-price">+2,000<small>円</small></div>
+          </label>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           選択内容の内訳・概算まとめ
+           ============================================================ -->
+      <section class="summary-card" id="summarySection" aria-labelledby="summaryTitle">
+        <div class="section-head">
+          <div class="section-title-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--ity-navy)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+              <line x1="8" y1="6" x2="16" y2="6"></line>
+              <line x1="8" y1="10" x2="10" y2="10"></line>
+              <line x1="14" y1="10" x2="16" y2="10"></line>
+              <line x1="8" y1="14" x2="10" y2="14"></line>
+              <line x1="14" y1="14" x2="16" y2="14"></line>
+              <line x1="8" y1="18" x2="16" y2="18"></line>
+            </svg>
+            <h2 class="section-title" id="summaryTitle">選択内容の内訳・概算合計</h2>
+          </div>
+        </div>
+
+        <ul class="breakdown-list" id="breakdownList"></ul>
+
+        <div class="total-panel">
+          <div class="total-row">
+            <span>概算合計（税別）</span>
+            <strong id="summarySubtotal">15,000円</strong>
+          </div>
+          <div class="total-row">
+            <span>消費税（10%）</span>
+            <span id="summaryTax">1,500円</span>
+          </div>
+          <div class="total-row-main">
+            <span class="total-main-label">税込合計（10%）</span>
+            <span class="total-main-amount"><span id="summaryTotal">16,500</span><small>円</small></span>
+          </div>
+          <div class="recycle-badge-inline" id="summaryRecycleBadge">
+            <span class="recycle-badge-pill">＋法定リサイクル料金別途</span>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer-note">
+        ※上記に当てはまらない内容やご不明な点は、LINEトークから設置場所のお写真をお送りいただければ無料でお見積りいたします。<br />
+        ITY電気｜表示金額は概算の目安です（現地状況を確認のうえ正式にご案内いたします）
+      </footer>
+
+    </main>
+  </div>
+
+  <!-- ==================== 画面最下部 固定サマリーバー ==================== -->
+  <div class="sticky-footer" role="region" aria-label="概算合計とLINE相談コピー">
+    <div class="sticky-footer-inner">
+      <a href="#summarySection" class="sticky-price-col" aria-label="内訳へ移動">
+        <div class="sticky-sub-line">概算合計（税別）：<span id="footerSubtotal">15,000</span>円</div>
+        <div class="sticky-main-line">
+          <span class="sticky-label">税込合計（10%）</span>
+          <span class="sticky-total-val"><span id="footerTotal">16,500</span><small>円</small></span>
+        </div>
+        <span class="sticky-recycle-badge" id="footerRecycleBadge">＋法定リサイクル料金別途</span>
+      </a>
+
+      <button type="button" id="copyLineBtn" class="btn-line-copy">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 5.92 2 10.75c0 2.66 1.38 5.04 3.56 6.64.18.13.29.34.28.56l-.12 2.41c-.02.42.42.7.79.5l2.75-1.5c.2-.11.43-.14.66-.09.68.14 1.38.23 2.08.23 5.52 0 10-3.92 10-8.75S17.52 2 12 2z"></path>
+        </svg>
+        <span>LINE相談用にコピー</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== トースト通知（alert不使用） ==================== -->
+  <div class="toast" id="toastEl" role="status" aria-live="polite">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <span id="toastText">コピーしました！LINEトークに貼り付けてお送りください。</span>
+  </div>
+
+  <!-- ==================== コピー内容プレビューモーダル ==================== -->
+  <div class="modal-backdrop" id="previewModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitle">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#06c755" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>コピー内容の確認（LINE相談用）</span>
+        </h3>
+        <button type="button" id="modalCloseX" class="modal-close-x" aria-label="モーダルを閉じる">×</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-guide">以下の内容がコピーされました。ITY電気のLINEトーク画面に戻り、入力欄に「貼り付け」て送信してください。</p>
+        <textarea id="modalCopyTextarea" class="modal-textarea" readonly aria-label="コピーされたLINE相談用テキスト"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="modalCloseBtn" class="btn-modal-secondary">閉じる</button>
+        <button type="button" id="modalRecopyBtn" class="btn-modal-primary">もう一度コピー</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== シミュレーター制御スクリプト ==================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      // ---------- 定数・状態管理 ----------
+      const PIPE_UNIT_PRICE = 3500;
+      const PIPE_MIN = 0;
+      const PIPE_MAX = 10;
+
+      // セクション1（標準取付）は単一選択かつ再タップで解除可能（null = 未選択）
+      let selectedStdKey = '3.6';
+      // セクション6（専用回路工事）は単一選択かつ再タップで解除可能（null = 未選択）
+      let selectedCircuitKey = null;
+      // セクション4（配管延長メートル数）
+      let pipeMeters = 0;
+      // LINE送信用に生成された最新テキスト
+      let latestConsultText = '';
+      let toastTimerId = null;
+
+      // ---------- DOM参照 ----------
+      const resetAllBtn = document.getElementById('resetAllBtn');
+      const copyLineBtn = document.getElementById('copyLineBtn');
+
+      const stdButtons = document.querySelectorAll('[data-std-btn]');
+      const specialOpts = document.querySelectorAll('.special-opt');
+      const chkWallMount = document.getElementById('chkWallMount');
+      const groupWallMount = document.getElementById('groupWallMount');
+      const branchWallMount = document.getElementById('branchWallMount');
+      const wallMaterialRadios = document.querySelectorAll('input[name="wallMaterial"]');
+
+      const chkConcealed = document.getElementById('chkConcealed');
+      const groupConcealed = document.getElementById('groupConcealed');
+      const branchConcealed = document.getElementById('branchConcealed');
+
+      const outdoorCoverRadios = document.querySelectorAll('input[name="outdoorCover"]');
+      const branchCoverNew = document.getElementById('branchCoverNew');
+      const coverColorRadios = document.querySelectorAll('input[name="coverColor"]');
+      const branchCoverReuse = document.getElementById('branchCoverReuse');
+      const wallPaintRadios = document.querySelectorAll('input[name="wallPaint"]');
+      const alertWallPaint = document.getElementById('alertWallPaint');
+      const coverDamageRadios = document.querySelectorAll('input[name="coverDamage"]');
+
+      const chkIndoorCover = document.getElementById('chkIndoorCover');
+
+      const pipeStepperBox = document.getElementById('pipeStepperBox');
+      const pipeMinusBtn = document.getElementById('pipeMinusBtn');
+      const pipePlusBtn = document.getElementById('pipePlusBtn');
+      const pipeMeterValue = document.getElementById('pipeMeterValue');
+      const pipeCostValue = document.getElementById('pipeCostValue');
+
+      const chkRemove = document.getElementById('chkRemove');
+      const chkDisposal = document.getElementById('chkDisposal');
+      const groupDisposal = document.getElementById('groupDisposal');
+      const branchDisposal = document.getElementById('branchDisposal');
+
+      const circuitButtons = document.querySelectorAll('[data-circuit-btn]');
+      const circuitNoteBox = document.getElementById('circuitNoteBox');
+      const chkVoltage = document.getElementById('chkVoltage');
+      const chkOutlet = document.getElementById('chkOutlet');
+
+      const breakdownList = document.getElementById('breakdownList');
+      const summarySubtotal = document.getElementById('summarySubtotal');
+      const summaryTax = document.getElementById('summaryTax');
+      const summaryTotal = document.getElementById('summaryTotal');
+      const summaryRecycleBadge = document.getElementById('summaryRecycleBadge');
+
+      const footerSubtotal = document.getElementById('footerSubtotal');
+      const footerTotal = document.getElementById('footerTotal');
+      const footerRecycleBadge = document.getElementById('footerRecycleBadge');
+
+      const toastEl = document.getElementById('toastEl');
+      const toastText = document.getElementById('toastText');
+
+      const previewModal = document.getElementById('previewModal');
+      const modalCopyTextarea = document.getElementById('modalCopyTextarea');
+      const modalCloseX = document.getElementById('modalCloseX');
+      const modalCloseBtn = document.getElementById('modalCloseBtn');
+      const modalRecopyBtn = document.getElementById('modalRecopyBtn');
+
+      /**
+       * 数値を3桁カンマ区切りにフォーマット
+       * @param {number} num
+       * @returns {string}
+       */
+      function formatYen(num) {
+        return Number(num || 0).toLocaleString('ja-JP');
+      }
+
+      /**
+       * 指定nameでチェック済みのラジオ要素を取得
+       * @param {string} name
+       * @returns {HTMLInputElement|null}
+       */
+      function getCheckedRadio(name) {
+        return document.querySelector('input[name="' + name + '"]:checked');
+      }
+
+      /**
+       * 指定name・valueのラジオを選択状態にセット
+       * @param {string} name
+       * @param {string} value
+       */
+      function setRadioValue(name, value) {
+        const target = document.querySelector('input[name="' + name + '"][value="' + value + '"]');
+        if (target) {
+          target.checked = true;
+        }
+      }
+
+      /**
+       * 条件分岐パネルの開閉を切り替え
+       * @param {HTMLElement|null} el
+       * @param {boolean} isOpen
+       */
+      function setBranchOpen(el, isOpen) {
+        if (!el) return;
+        el.classList.toggle('is-open', Boolean(isOpen));
+        el.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      }
+
+      /**
+       * すべてのカード・ボタン・ピルの選択ハイライト状態を同期
+       */
+      function syncHighlights() {
+        // 1. 標準取付工事（ボタン型ラジオ）
+        stdButtons.forEach(function (btn) {
+          const isSelected = btn.dataset.stdBtn === selectedStdKey;
+          btn.classList.toggle('is-selected', isSelected);
+          btn.setAttribute('aria-checked', isSelected ? 'true' : 'false');
+        });
+
+        // 6. 専用回路工事（ボタン型ラジオ＋常時表示の注意書きボックス強調連動）
+        circuitButtons.forEach(function (btn) {
+          const isSelected = btn.dataset.circuitBtn === selectedCircuitKey;
+          btn.classList.toggle('is-selected', isSelected);
+          btn.setAttribute('aria-checked', isSelected ? 'true' : 'false');
+        });
+        if (circuitNoteBox) {
+          circuitNoteBox.classList.toggle('is-highlighted', selectedCircuitKey !== null);
+        }
+
+        // チェックボックスカード全般
+        document.querySelectorAll('[data-check-card]').forEach(function (card) {
+          const input = card.querySelector('input[type="checkbox"]');
+          if (input) {
+            card.classList.toggle('is-selected', input.checked);
+          }
+        });
+
+        // 条件分岐を内包するグループ枠
+        if (groupWallMount && chkWallMount) {
+          groupWallMount.classList.toggle('is-selected', chkWallMount.checked);
+        }
+        if (groupConcealed && chkConcealed) {
+          groupConcealed.classList.toggle('is-selected', chkConcealed.checked);
+        }
+        if (groupDisposal && chkDisposal) {
+          groupDisposal.classList.toggle('is-selected', chkDisposal.checked);
+        }
+
+        // ラジオカード（屋外化粧カバー）
+        document.querySelectorAll('[data-card-for="outdoorCover"]').forEach(function (card) {
+          const input = card.querySelector('input[type="radio"]');
+          if (input) {
+            card.classList.toggle('is-selected', input.checked);
+          }
+        });
+
+        // ピル型ラジオ（外壁材質・カバー色・外壁塗装・劣化）
+        ['wallMaterial', 'coverColor', 'wallPaint', 'coverDamage'].forEach(function (groupName) {
+          document.querySelectorAll('[data-pill-for="' + groupName + '"]').forEach(function (pill) {
+            const input = pill.querySelector('input[type="radio"]');
+            if (input) {
+              pill.classList.toggle('is-selected', input.checked);
+            }
+          });
+        });
+
+        // 配管延長ステッパー
+        if (pipeStepperBox) {
+          pipeStepperBox.classList.toggle('is-selected', pipeMeters > 0);
+        }
+        if (pipeMinusBtn) {
+          pipeMinusBtn.disabled = pipeMeters <= PIPE_MIN;
+        }
+        if (pipePlusBtn) {
+          pipePlusBtn.disabled = pipeMeters >= PIPE_MAX;
+        }
+      }
+
+      /**
+       * 条件分岐パネルの表示・非表示を最新状態へ同期
+       */
+      function updateBranches() {
+        setBranchOpen(branchWallMount, chkWallMount && chkWallMount.checked);
+        setBranchOpen(branchConcealed, chkConcealed && chkConcealed.checked);
+        setBranchOpen(branchDisposal, chkDisposal && chkDisposal.checked);
+
+        const coverRadio = getCheckedRadio('outdoorCover');
+        const coverVal = coverRadio ? coverRadio.value : 'none';
+        const isCoverNew = (coverVal === 'new_basic' || coverVal === 'new_2f1f');
+        const isCoverReuse = (coverVal === 'reuse_same' || coverVal === 'reuse_2f1f');
+
+        setBranchOpen(branchCoverNew, isCoverNew);
+        setBranchOpen(branchCoverReuse, isCoverReuse);
+
+        const paintRadio = getCheckedRadio('wallPaint');
+        const isPaintYes = paintRadio && paintRadio.value === 'あり';
+        setBranchOpen(alertWallPaint, isCoverReuse && isPaintYes);
+      }
+
+      /**
+       * 内訳リストのDOMを描画（XSS対策のためテキストノードで生成）
+       * @param {Array<{label: string, sub: string, price: number}>} items
+       */
+      function renderBreakdown(items) {
+        breakdownList.textContent = '';
+
+        if (items.length === 0) {
+          const emptyLi = document.createElement('li');
+          emptyLi.className = 'breakdown-empty';
+          emptyLi.textContent = '現在選択されている工事項目はありません。ご希望の項目をタップしてください。';
+          breakdownList.appendChild(emptyLi);
+          return;
+        }
+
+        items.forEach(function (item) {
+          const li = document.createElement('li');
+          li.className = 'breakdown-item';
+
+          const left = document.createElement('div');
+          const titleP = document.createElement('p');
+          titleP.className = 'breakdown-name';
+          titleP.textContent = item.label;
+          left.appendChild(titleP);
+
+          if (item.sub) {
+            const subP = document.createElement('p');
+            subP.className = 'breakdown-sub';
+            subP.textContent = item.sub;
+            left.appendChild(subP);
+          }
+
+          const priceDiv = document.createElement('div');
+          priceDiv.className = 'breakdown-price';
+          priceDiv.textContent = formatYen(item.price) + '円';
+
+          li.appendChild(left);
+          li.appendChild(priceDiv);
+          breakdownList.appendChild(li);
+        });
+      }
+
+      /**
+       * LINEトーク貼り付け用の相談テキストを生成
+       * @param {Array<{label: string, sub: string, price: number}>} items
+       * @param {number} subtotal
+       * @param {number} tax
+       * @param {number} total
+       * @param {boolean} hasDisposal
+       * @param {boolean} hasCircuit
+       * @returns {string}
+       */
+      function buildConsultText(items, subtotal, tax, total, hasDisposal, hasCircuit) {
+        const lines = [];
+        lines.push('【ITY電気 エアコン工事 料金シミュレーション結果】');
+        lines.push('');
+        lines.push('■ 選択した工事内容');
+
+        if (items.length === 0) {
+          lines.push('・未選択（設置状況のご相談希望）');
+        } else {
+          items.forEach(function (item) {
+            lines.push('・' + item.label + '：' + formatYen(item.price) + '円（税別）');
+            if (item.sub) {
+              lines.push('  └ ' + item.sub);
+            }
+          });
+        }
+
+        lines.push('');
+        lines.push('■ 概算金額');
+        lines.push('・税別合計：' + formatYen(subtotal) + '円');
+        lines.push('・消費税（10%）：' + formatYen(tax) + '円');
+        lines.push('・税込合計：' + formatYen(total) + '円');
+
+        if (hasDisposal) {
+          lines.push('※上記とは別に、法定の家電リサイクル料金がかかります。');
+        }
+        if (hasCircuit) {
+          lines.push('※専用回路の配線延長（+1,000円/m）や屋根裏・床下の隠蔽配線（+4,000円）は現地状況を確認のうえご案内いたします。');
+        }
+
+        lines.push('');
+        lines.push('※エアコンの型番や設置場所のお写真をあわせてお送りいただけますと、よりスムーズにお見積りできます。');
+        lines.push('この内容で相談・お見積りをお願いします！');
+
+        return lines.join('\n');
+      }
+
+      /**
+       * 全体の金額計算・UI反映・コピー用テキスト生成を実行
+       */
+      function recalculate() {
+        try {
+          syncHighlights();
+          updateBranches();
+
+          const items = [];
+
+          // 1. 標準取付工事
+          if (selectedStdKey !== null) {
+            stdButtons.forEach(function (btn) {
+              if (btn.dataset.stdBtn === selectedStdKey) {
+                items.push({
+                  label: btn.dataset.label,
+                  sub: '',
+                  price: Number(btn.dataset.price || 0)
+                });
+              }
+            });
+          }
+
+          // 2. 特殊設置・配管工事
+          specialOpts.forEach(function (opt) {
+            if (!opt.checked) return;
+            let subText = '';
+            if (opt === chkWallMount) {
+              const mat = getCheckedRadio('wallMaterial');
+              const matVal = mat ? mat.value : 'わからない';
+              subText = '外壁の材質：' + matVal;
+              if (matVal === 'ALC' || matVal === '漆喰') {
+                subText += '（※強度により工事不可の場合あり）';
+              }
+            } else if (opt === chkConcealed) {
+              subText = '※排水・電源ケーブル（2.0mm等）の現地確認が必要';
+            }
+            items.push({
+              label: opt.dataset.label,
+              sub: subText,
+              price: Number(opt.value || 0)
+            });
+          });
+
+          // 3. 化粧カバー（屋外70mm）
+          const coverRadio = getCheckedRadio('outdoorCover');
+          if (coverRadio && coverRadio.value !== 'none') {
+            const coverVal = coverRadio.value;
+            let coverSub = '';
+            if (coverVal === 'new_basic' || coverVal === 'new_2f1f') {
+              const color = getCheckedRadio('coverColor');
+              coverSub = 'ご希望カラー：' + (color ? color.value : '当日相談・おまかせ');
+            } else if (coverVal === 'reuse_same' || coverVal === 'reuse_2f1f') {
+              const paint = getCheckedRadio('wallPaint');
+              const damage = getCheckedRadio('coverDamage');
+              const paintVal = paint ? paint.value : 'なし';
+              const damageVal = damage ? damage.value : 'なさそう';
+              coverSub = '外壁塗装：' + paintVal + ' ／ 割れ・劣化：' + damageVal;
+              if (paintVal === 'あり') {
+                coverSub += '（※塗膜固着による再利用不可・塗装剥がれ注意）';
+              }
+            }
+            items.push({
+              label: coverRadio.dataset.label,
+              sub: coverSub,
+              price: Number(coverRadio.dataset.price || 0)
+            });
+          }
+
+          // 3-2. 室内化粧カバー（標準）
+          if (chkIndoorCover && chkIndoorCover.checked) {
+            items.push({
+              label: chkIndoorCover.dataset.label,
+              sub: 'ヘッド・ストレート1m・曲がり1箇所・断熱処理1m含む',
+              price: Number(chkIndoorCover.value || 0)
+            });
+          }
+
+          // 4. 配管延長
+          const pipeCost = pipeMeters * PIPE_UNIT_PRICE;
+          if (pipeMeterValue) {
+            pipeMeterValue.textContent = String(pipeMeters);
+          }
+          if (pipeCostValue) {
+            pipeCostValue.textContent = pipeMeters > 0
+              ? '+' + formatYen(pipeCost) + '円（3,500円 × ' + pipeMeters + 'm）'
+              : '延長なし（0円）';
+          }
+          if (pipeMeters > 0) {
+            items.push({
+              label: '配管延長（' + pipeMeters + 'm）',
+              sub: '3,500円 × ' + pipeMeters + 'm（標準4m超過分）',
+              price: pipeCost
+            });
+          }
+
+          // 5. 既存エアコンの取り外し・処分
+          if (chkRemove && chkRemove.checked) {
+            items.push({
+              label: chkRemove.dataset.label,
+              sub: '',
+              price: Number(chkRemove.value || 0)
+            });
+          }
+          const hasDisposal = Boolean(chkDisposal && chkDisposal.checked);
+          if (hasDisposal) {
+            items.push({
+              label: chkDisposal.dataset.label,
+              sub: '別途、法定の家電リサイクル料金がかかります',
+              price: Number(chkDisposal.value || 0)
+            });
+          }
+
+          // 6. 電源・コンセント周り
+          const hasCircuit = selectedCircuitKey !== null;
+          if (hasCircuit) {
+            circuitButtons.forEach(function (btn) {
+              if (btn.dataset.circuitBtn === selectedCircuitKey) {
+                items.push({
+                  label: btn.dataset.label,
+                  sub: '延長（+1,000円/m）・隠蔽配線（+4,000円）は現地確認',
+                  price: Number(btn.dataset.price || 0)
+                });
+              }
+            });
+          }
+          if (chkVoltage && chkVoltage.checked) {
+            items.push({
+              label: chkVoltage.dataset.label,
+              sub: '',
+              price: Number(chkVoltage.value || 0)
+            });
+          }
+          if (chkOutlet && chkOutlet.checked) {
+            items.push({
+              label: chkOutlet.dataset.label,
+              sub: '',
+              price: Number(chkOutlet.value || 0)
+            });
+          }
+
+          // 合計計算（税別・消費税10%・税込）
+          const subtotal = items.reduce(function (acc, item) {
+            return acc + item.price;
+          }, 0);
+          const tax = Math.floor(subtotal * 0.1);
+          const total = subtotal + tax;
+
+          // 画面表示を更新
+          renderBreakdown(items);
+          summarySubtotal.textContent = formatYen(subtotal) + '円';
+          summaryTax.textContent = formatYen(tax) + '円';
+          summaryTotal.textContent = formatYen(total);
+          footerSubtotal.textContent = formatYen(subtotal);
+          footerTotal.textContent = formatYen(total);
+
+          summaryRecycleBadge.classList.toggle('is-visible', hasDisposal);
+          footerRecycleBadge.classList.toggle('is-visible', hasDisposal);
+
+          // LINE相談コピー用テキストを更新
+          latestConsultText = buildConsultText(items, subtotal, tax, total, hasDisposal, hasCircuit);
+        } catch (err) {
+          console.error('料金計算エラー:', err);
+        }
+      }
+
+      /**
+       * トースト通知を表示（alert不使用）
+       * @param {string} message
+       */
+      function showToast(message) {
+        if (!toastEl || !toastText) return;
+        toastText.textContent = message;
+        toastEl.classList.add('is-show');
+        if (toastTimerId) {
+          clearTimeout(toastTimerId);
+        }
+        toastTimerId = setTimeout(function () {
+          toastEl.classList.remove('is-show');
+        }, 3200);
+      }
+
+      /**
+       * クリップボードへテキストをコピー（iFrame互換のexecCommand優先）
+       * @param {string} text
+       * @returns {boolean}
+       */
+      function copyTextToClipboard(text) {
+        let copied = false;
+        try {
+          const tempArea = document.createElement('textarea');
+          tempArea.value = text;
+          tempArea.setAttribute('readonly', '');
+          tempArea.style.position = 'fixed';
+          tempArea.style.top = '-9999px';
+          tempArea.style.left = '-9999px';
+          document.body.appendChild(tempArea);
+          tempArea.focus();
+          tempArea.select();
+          tempArea.setSelectionRange(0, tempArea.value.length);
+          copied = document.execCommand('copy');
+          document.body.removeChild(tempArea);
+        } catch (err) {
+          copied = false;
+        }
+        return copied;
+      }
+
+      /**
+       * コピー内容確認モーダルの開閉
+       * @param {boolean} isOpen
+       */
+      function setModalOpen(isOpen) {
+        if (!previewModal) return;
+        previewModal.classList.toggle('is-open', Boolean(isOpen));
+        previewModal.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      }
+
+      /**
+       * LINE相談用コピー処理
+       * @param {boolean} shouldOpenModal
+       */
+      function handleCopy(shouldOpenModal) {
+        recalculate();
+        if (modalCopyTextarea) {
+          modalCopyTextarea.value = latestConsultText;
+        }
+        const ok = copyTextToClipboard(latestConsultText);
+        if (ok) {
+          showToast('コピーしました！LINEトークに貼り付けてお送りください。');
+        } else {
+          showToast('表示された枠内の文章を長押しでコピーしてください。');
+        }
+        if (shouldOpenModal) {
+          setModalOpen(true);
+        }
+      }
+
+      /**
+       * すべての選択状態を初期値へリセット
+       */
+      function resetAll() {
+        selectedStdKey = '3.6';
+        selectedCircuitKey = null;
+        pipeMeters = 0;
+
+        specialOpts.forEach(function (opt) { opt.checked = false; });
+        if (chkIndoorCover) chkIndoorCover.checked = false;
+        if (chkRemove) chkRemove.checked = false;
+        if (chkDisposal) chkDisposal.checked = false;
+        if (chkVoltage) chkVoltage.checked = false;
+        if (chkOutlet) chkOutlet.checked = false;
+
+        setRadioValue('outdoorCover', 'none');
+        setRadioValue('wallMaterial', 'わからない');
+        setRadioValue('coverColor', 'アイボリー');
+        setRadioValue('wallPaint', 'なし');
+        setRadioValue('coverDamage', 'なさそう');
+
+        recalculate();
+        showToast('選択内容を初期状態にリセットしました。');
+      }
+
+      // ---------- イベント登録 ----------
+
+      // 1. 標準取付工事（単一選択／選択中を再タップで解除）
+      stdButtons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const key = btn.dataset.stdBtn;
+          selectedStdKey = (selectedStdKey === key) ? null : key;
+          recalculate();
+        });
+      });
+
+      // 2. 特殊設置・配管工事
+      specialOpts.forEach(function (opt) {
+        opt.addEventListener('change', recalculate);
+      });
+      wallMaterialRadios.forEach(function (radio) {
+        radio.addEventListener('change', recalculate);
+      });
+
+      // 3. 化粧カバー（屋外・室内）
+      outdoorCoverRadios.forEach(function (radio) {
+        radio.addEventListener('change', recalculate);
+      });
+      coverColorRadios.forEach(function (radio) {
+        radio.addEventListener('change', recalculate);
+      });
+      wallPaintRadios.forEach(function (radio) {
+        radio.addEventListener('change', recalculate);
+      });
+      coverDamageRadios.forEach(function (radio) {
+        radio.addEventListener('change', recalculate);
+      });
+      if (chkIndoorCover) {
+        chkIndoorCover.addEventListener('change', recalculate);
+      }
+
+      // 4. 配管延長ステッパー
+      if (pipeMinusBtn) {
+        pipeMinusBtn.addEventListener('click', function () {
+          if (pipeMeters > PIPE_MIN) {
+            pipeMeters -= 1;
+            recalculate();
+          }
+        });
+      }
+      if (pipePlusBtn) {
+        pipePlusBtn.addEventListener('click', function () {
+          if (pipeMeters < PIPE_MAX) {
+            pipeMeters += 1;
+            recalculate();
+          }
+        });
+      }
+
+      // 5. 取り外し・処分
+      if (chkRemove) chkRemove.addEventListener('change', recalculate);
+      if (chkDisposal) chkDisposal.addEventListener('change', recalculate);
+
+      // 6. 電源・コンセント周り（専用回路は単一選択／選択中を再タップで解除）
+      circuitButtons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const key = btn.dataset.circuitBtn;
+          selectedCircuitKey = (selectedCircuitKey === key) ? null : key;
+          recalculate();
+        });
+      });
+
+      if (chkVoltage) chkVoltage.addEventListener('change', recalculate);
+      if (chkOutlet) chkOutlet.addEventListener('change', recalculate);
+
+      // リセット・コピー・モーダル制御
+      if (resetAllBtn) resetAllBtn.addEventListener('click', resetAll);
+      if (copyLineBtn) {
+        copyLineBtn.addEventListener('click', function () {
+          handleCopy(true);
+        });
+      }
+
+      if (modalCloseX) {
+        modalCloseX.addEventListener('click', function () {
+          setModalOpen(false);
+        });
+      }
+      if (modalCloseBtn) {
+        modalCloseBtn.addEventListener('click', function () {
+          setModalOpen(false);
+        });
+      }
+      if (modalRecopyBtn) {
+        modalRecopyBtn.addEventListener('click', function () {
+          handleCopy(false);
+        });
+      }
+
+      if (previewModal) {
+        previewModal.addEventListener('click', function (e) {
+          if (e.target === previewModal) {
+            setModalOpen(false);
+          }
+        });
+      }
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && previewModal && previewModal.classList.contains('is-open')) {
+          setModalOpen(false);
+        }
+      });
+
+      // 初回計算＆描画
+      window.addEventListener('load', recalculate);
+      recalculate();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>ITY電気 よくある質問・工事前のご確認事項</title>
+
+  <!-- Google Fonts: Inter（英数字の見やすさ向上）＋日本語システムフォント併用 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // ITY電気 料金シミュレーターと完全統一したブランドカラー設定
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ityNavyDeep: '#09264a',
+            ityNavy: '#0e3a6c',
+            ityBlue: '#1668c7',
+            ityBlueSoft: '#edf5ff',
+            ityBlueBorder: '#93c5fd',
+            lineGreen: '#06c755',
+            lineGreenDark: '#05ad4a',
+            pageOuter: '#e6eef7',
+            pageBg: '#f4f8fc',
+          },
+          fontFamily: {
+            sans: [
+              'Inter',
+              '-apple-system',
+              'BlinkMacSystemFont',
+              '"Hiragino Sans"',
+              '"Hiragino Kaku Gothic ProN"',
+              '"Yu Gothic UI"',
+              '"Yu Gothic"',
+              '"Meiryo"',
+              'sans-serif',
+            ],
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="m-0 p-0 bg-pageOuter text-slate-800 font-sans antialiased overflow-x-hidden selection:bg-blue-100">
+
+  <!-- ============================================================
+       スマホ縦画面（LINEアプリ内ブラウザ）最適化コンテナ
+       リッチメニューからのリンク先指定方法：
+         ③ よくある質問           -> .../ity_ac_guide.html#faq
+         ④ 確認していただきたい項目 -> .../ity_ac_guide.html#check
+       ============================================================ -->
+  <div class="w-full max-w-[500px] min-h-screen mx-auto bg-pageBg shadow-[0_0_32px_rgba(14,58,108,0.12)] flex flex-col relative pb-10">
+
+    <!-- ==================== 上部固定ヘッダー ==================== -->
+    <header class="sticky top-0 z-40 shadow-[0_3px_14px_rgba(9,38,74,0.18)]">
+      <!-- ブランドバー -->
+      <div class="bg-gradient-to-br from-ityNavyDeep via-ityNavy to-ityBlue text-white px-4 pt-3 pb-3 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-8 h-8 rounded-xl bg-white/15 border border-white/30 flex items-center justify-center shrink-0" aria-hidden="true">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+          <div class="min-w-0">
+            <p class="text-[11px] font-bold text-sky-200 tracking-wider leading-tight">ITY電気 公式ガイド</p>
+            <h1 class="text-[15px] font-extrabold text-white leading-snug truncate">エアコン工事 ご案内ページ</h1>
+          </div>
+        </div>
+        <span class="text-[11px] font-bold bg-white/15 border border-white/25 rounded-full px-2.5 py-1 whitespace-nowrap shrink-0">
+          お見積り無料
+        </span>
+      </div>
+
+      <!-- タブ切替バー（#faq / #check 連動） -->
+      <nav class="bg-white/95 backdrop-blur border-b border-slate-200 px-3 py-2" aria-label="案内ページ切り替え">
+        <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-2xl" role="tablist">
+          <button
+            type="button"
+            id="tabBtnFaq"
+            role="tab"
+            aria-selected="true"
+            aria-controls="panelFaq"
+            data-tab-target="faq"
+            class="flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-[13px] font-extrabold transition-all duration-200 cursor-pointer bg-ityNavy text-white shadow-sm"
+          >
+            <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <span>よくある質問</span>
+          </button>
+
+          <button
+            type="button"
+            id="tabBtnCheck"
+            role="tab"
+            aria-selected="false"
+            aria-controls="panelCheck"
+            data-tab-target="check"
+            class="flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-[13px] font-extrabold transition-all duration-200 cursor-pointer text-slate-600 hover:text-ityNavy"
+          >
+            <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 11l3 3L22 4"></path>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+            </svg>
+            <span>工事前のご確認</span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- ==================== メインコンテンツ ==================== -->
+    <main class="px-3.5 pt-4 flex-1 flex flex-col gap-4">
+
+      <!-- ============================================================
+           タブ1：よくある質問（#faq）
+           ※文言を変更したい場合は、下の各質問・回答テキストを書き換えてください
+           ============================================================ -->
+      <section id="panelFaq" role="tabpanel" aria-labelledby="tabBtnFaq" class="flex flex-col gap-3.5">
+
+        <!-- 導入カード -->
+        <div class="bg-gradient-to-b from-ityBlueSoft to-white border border-ityBlueBorder rounded-2xl p-4 shadow-sm">
+          <div class="flex items-center justify-between gap-2 mb-1.5">
+            <h2 class="text-[16px] font-extrabold text-ityNavyDeep flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-ityNavy text-white text-xs font-extrabold inline-flex items-center justify-center shrink-0">Q</span>
+              <span>よくある質問（Q&amp;A）</span>
+            </h2>
+            <button
+              type="button"
+              id="toggleAllFaqBtn"
+              class="text-[11px] font-bold text-ityBlue bg-white border border-ityBlueBorder rounded-full px-3 py-1.5 active:scale-95 transition cursor-pointer whitespace-nowrap"
+            >
+              すべて開く
+            </button>
+          </div>
+          <p class="text-[12.5px] text-slate-600 leading-relaxed">
+            お客様からよくいただくご質問をまとめました。気になる項目をタップすると回答が表示されます。
+          </p>
+        </div>
+
+        <!-- Q&A アコーディオンリスト（Q1〜Q7） -->
+        <div class="flex flex-col gap-2.5" id="faqList">
+
+          <!-- Q1 -->
+          <article class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden transition-colors" data-faq-item data-open="true">
+            <button
+              type="button"
+              class="w-full text-left p-4 flex items-start justify-between gap-3 cursor-pointer active:bg-slate-50 transition"
+              data-faq-trigger
+              aria-expanded="true"
+            >
+              <div class="flex items-start gap-2.5 min-w-0">
+                <span class="w-6 h-6 rounded-lg bg-ityBlue text-white text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5">Q1</span>
+                <span class="text-[14px] font-bold text-ityNavyDeep leading-snug">「標準取付工事」にはどこまで含まれていますか？</span>
+              </div>
+              <svg class="w-5 h-5 text-ityBlue shrink-0 mt-0.5 transition-transform duration-200 rotate-180" data-faq-chevron viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="px-4 pb-4 pt-0 border-t border-slate-100" data-faq-body>
+              <div class="flex items-start gap-2.5 pt-3">
+                <span class="w-6 h-6 rounded-lg bg-sky-100 text-ityNavy text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5">A</span>
+                <p class="text-[13.5px] text-slate-700 leading-relaxed">
+                  室内機・室外機の設置（室外機は地面またはベランダ置き）、配管パイプ4mまでの接続、テープ巻き仕上げ、プラスチックブロック設置、真空引き作業が含まれます。
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- Q2 -->
+          <article class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden transition-colors" data-faq-item data-open="false">
+            <button
+              type="button"
+              class="w-full text-left p-4 flex items-start justify-between gap-3 cursor-pointer active:bg-slate-50 transition"
+              data-faq-trigger
+              aria-expanded="false"
+            >
+              <div class="flex items-start gap-2.5 min-w-0">
+                <span class="w-6 h-6 rounded-lg bg-ityBlue text-white text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5">Q2</span>
+                <span class="text-[14px] font-bold text-ityNavyDeep leading-snug">ネット通販や量販店で購入したエアコンの「持ち込み取付」もお願いできますか？</span>
+              </div>
+              <svg class="w-5 h-5 text-ityBlue shrink-0 mt-0.5 transition-transform duration-200" data-faq-chevron viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="hidden px-4 pb-4 pt-0 border-t border-slate-100" data-faq-body>
+              <div class="flex items-start gap-2.5 pt-3">
+                <span class="w-6 h-6 rounded-lg bg-sky-100 text-ityNavy text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5">A</span>
+                <div class="text-[13.5px] text-slate-700 leading-relaxed space-y-1.5">
+                  <p>はい、対応しております！新品・中古問わずお気軽にご相談ください。</p>
+                  <p class="text-[12px] text-slate-500">※中古エアコンの場合は、ガス補充や部品交換が別途必要になる場合があります。</p>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Q3 -->
+          <article class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden transition-colors" data-faq-item data-open="false">
+            <button
+              type="button"
+              class="w-full text-left p-4 flex items-start justify-between gap-3 cursor-pointer active:bg-slate-50 transition"
+              data-faq-trigger
+              aria-expanded="false"
+            >
+              <div class="flex items-start gap-2.5 min-w-0">
+                <span class="w-6 h-6 rounded-lg bg-ityBlue text-white text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5">Q3</span>
+                <span class="text-[14px] font-bold text-ityNavyDeep leading-snug">見積もりだけでもお願いできますか？</span>
+              </div>
+              <svg class="w-5 h-5 text-ityBlue shrink-0 mt-0.5 transition-transform duration-200" data-faq-chevron viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="hidden px-4 pb-4 pt-0 border-t border-slate-100" data-faq-body>
+              <div class="flex items-start gap-2.5 pt-3">
+                <span class="w-6 h-6 rounded-lg bg-sky-100 text-ityNavy text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5">A</span>
+                <p class="text-[13.5px] text-slate-700 leading-relaxed">
+                  はい、お見積りは無料です。まずは「料金シミュレーション」や「見積もり相談チャット」から、設置場所のお写真などをお送りいただけるとスムーズにご案内できます。
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- Q4 -->
+          <article class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden transition-colors" data-faq-item data-open="false">
+            <button
+              type="button"
+              class="w-full text-left p-4 flex items-start justify-between gap-3 cursor-pointer active:bg-slate-50 transition"
+              data-faq-trigger
+              aria-expanded="false"
+            >
+              <div class="flex items-start gap-2.5 min-w-0">
+                <span class="w-6 h-6 rounded-lg bg-ityBlue text-white text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5">Q4</span>
+                <span class="text-[14px] font-bold text-ityNavyDeep leading-snug">工事にかかる時間はどれくらいですか？</span>
+              </div>
+              <svg class="w-5 h-5 text-ityBlue shrink-0 mt-0.5 transition-transform duration-200" data-faq-chevron viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="hidden px-4 pb-4 pt-0 border-t border-slate-100" data-faq-body>
+              <div class="flex items-start gap-2.5 pt-3">
+                <span class="w-6 h-6 rounded-lg bg-sky-100 text-ityNavy text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5">A</span>
+                <p class="text-[13.5px] text-slate-700 leading-relaxed">
+                  標準取付工事であれば、1台あたり約1時間半〜2時間程度が目安です。既存エアコンの取り外しや化粧カバーの新設、特殊設置がある場合は、もう少しお時間をいただくことがあります。
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- Q5（RKC公式リサイクル料金リンク付き） -->
+          <article class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden transition-colors" data-faq-item data-open="false">
+            <button
+              type="button"
+              class="w-full text-left p-4 flex items-start justify-between gap-3 cursor-pointer active:bg-slate-50 transition"
+              data-faq-trigger
+              aria-expanded="false"
+            >
+              <div class="flex items-start gap-2.5 min-w-0">
+                <span class="w-6 h-6 rounded-lg bg-ityBlue text-white text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5">Q5</span>
+                <span class="text-[14px] font-bold text-ityNavyDeep leading-snug">今ついている古いエアコンの取り外しや処分もお願いできますか？</span>
+              </div>
+              <svg class="w-5 h-5 text-ityBlue shrink-0 mt-0.5 transition-transform duration-200" data-faq-chevron viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="hidden px-4 pb-4 pt-0 border-t border-slate-100" data-faq-body>
+              <div class="flex items-start gap-2.5 pt-3">
+                <span class="w-6 h-6 rounded-lg bg-sky-100 text-ityNavy text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5">A</span>
+                <div class="flex-1 space-y-2.5">
+                  <p class="text-[13.5px] text-slate-700 leading-relaxed">
+                    はい、取り外しから回収・処分までまとめて対応可能です。家電リサイクル法に基づいた適正な処理を行っておりますのでご安心ください。
+                  </p>
+                  <div class="bg-amber-50 border border-amber-400 rounded-xl p-3 space-y-2">
+                    <p class="text-[12px] text-amber-900 leading-relaxed font-medium">
+                      処分時は収集運搬料（1,000円・税別）のほか、メーカーごとに定められた法定の家電リサイクル料金が別途かかります。
+                    </p>
+                    <a
+                      href="https://www.rkc.aeha.or.jp/recycle_price_compact.html"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="flex items-center justify-center gap-1.5 w-full py-2.5 px-3 rounded-xl bg-white border-2 border-amber-500 text-amber-900 text-[12.5px] font-extrabold text-center shadow-sm hover:bg-amber-100 active:scale-[0.98] transition"
+                    >
+                      <span>メーカー別の法定リサイクル料金を調べる（RKC公式）↗</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Q6 -->
+          <article class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden transition-colors" data-faq-item data-open="false">
+            <button
+              type="button"
+              class="w-full text-left p-4 flex items-start justify-between gap-3 cursor-pointer active:bg-slate-50 transition"
+              data-faq-trigger
+              aria-expanded="false"
+            >
+              <div class="flex items-start gap-2.5 min-w-0">
+                <span class="w-6 h-6 rounded-lg bg-ityBlue text-white text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5">Q6</span>
+                <span class="text-[14px] font-bold text-ityNavyDeep leading-snug">土日・祝日でも工事はお願いできますか？</span>
+              </div>
+              <svg class="w-5 h-5 text-ityBlue shrink-0 mt-0.5 transition-transform duration-200" data-faq-chevron viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="hidden px-4 pb-4 pt-0 border-t border-slate-100" data-faq-body>
+              <div class="flex items-start gap-2.5 pt-3">
+                <span class="w-6 h-6 rounded-lg bg-sky-100 text-ityNavy text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5">A</span>
+                <p class="text-[13.5px] text-slate-700 leading-relaxed">
+                  はい、土日・祝日も対応しております。ご予約が混み合いやすいため、お早めにご相談いただけますと幸いです。
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- Q7（※お支払い方法を追加・変更する場合はここを編集してください） -->
+          <article class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden transition-colors" data-faq-item data-open="false">
+            <button
+              type="button"
+              class="w-full text-left p-4 flex items-start justify-between gap-3 cursor-pointer active:bg-slate-50 transition"
+              data-faq-trigger
+              aria-expanded="false"
+            >
+              <div class="flex items-start gap-2.5 min-w-0">
+                <span class="w-6 h-6 rounded-lg bg-ityBlue text-white text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5">Q7</span>
+                <span class="text-[14px] font-bold text-ityNavyDeep leading-snug">支払い方法は何がありますか？</span>
+              </div>
+              <svg class="w-5 h-5 text-ityBlue shrink-0 mt-0.5 transition-transform duration-200" data-faq-chevron viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="hidden px-4 pb-4 pt-0 border-t border-slate-100" data-faq-body>
+              <div class="flex items-start gap-2.5 pt-3">
+                <span class="w-6 h-6 rounded-lg bg-sky-100 text-ityNavy text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5">A</span>
+                <p class="text-[13.5px] text-slate-700 leading-relaxed">
+                  当日工事完了後に、現金でのお支払いをお願いしております。
+                </p>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- 次のタブ（確認事項）への誘導カード -->
+        <button
+          type="button"
+          data-jump-tab="check"
+          class="w-full bg-white border-2 border-ityBlueBorder rounded-2xl p-4 flex items-center justify-between gap-3 text-left shadow-sm hover:bg-ityBlueSoft active:scale-[0.99] transition cursor-pointer"
+        >
+          <div class="min-w-0">
+            <span class="text-[11px] font-bold text-ityBlue block mb-0.5">あわせてチェック！</span>
+            <span class="text-[14px] font-extrabold text-ityNavyDeep block">工事前にご確認いただきたい5つの項目を見る</span>
+          </div>
+          <span class="w-9 h-9 rounded-full bg-ityBlueSoft text-ityBlue flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </span>
+        </button>
+      </section>
+
+      <!-- ============================================================
+           タブ2：工事前にご確認いただきたい項目（#check）
+           ※文言を変更したい場合は、下の項目1〜5のテキストを書き換えてください
+           ============================================================ -->
+      <section id="panelCheck" role="tabpanel" aria-labelledby="tabBtnCheck" class="hidden flex-col gap-3.5">
+
+        <!-- 導入＋セルフチェック進捗カード -->
+        <div class="bg-gradient-to-b from-ityBlueSoft to-white border border-ityBlueBorder rounded-2xl p-4 shadow-sm">
+          <div class="flex items-center justify-between gap-2 mb-1.5">
+            <h2 class="text-[16px] font-extrabold text-ityNavyDeep flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-ityNavy text-white text-xs font-extrabold inline-flex items-center justify-center shrink-0">✓</span>
+              <span>工事前のご確認事項</span>
+            </h2>
+            <span id="checkProgressBadge" class="text-[11px] font-extrabold bg-white text-ityNavy border border-ityBlueBorder rounded-full px-2.5 py-1 whitespace-nowrap">
+              確認済み 0 / 5
+            </span>
+          </div>
+          <p class="text-[12.5px] text-slate-600 leading-relaxed mb-3">
+            当日の工事をスムーズかつ安全に進めるため、ご依頼前に以下の5点をご確認ください。各カードの「確認しました」ボタンでチェックできます。
+          </p>
+          <!-- プログレスバー -->
+          <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+            <div id="checkProgressBar" class="h-full bg-ityBlue rounded-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- 確認項目リスト（1〜5） -->
+        <div class="flex flex-col gap-3">
+
+          <!-- 1. エアコン専用コンセント・電圧について -->
+          <article class="bg-white rounded-2xl border-2 border-slate-200/90 p-4 shadow-sm transition-all duration-200" data-check-card="1">
+            <div class="flex items-start gap-2.5 mb-2.5">
+              <span class="w-7 h-7 rounded-xl bg-ityNavy text-white text-sm font-extrabold flex items-center justify-center shrink-0">1</span>
+              <h3 class="text-[15px] font-extrabold text-ityNavyDeep leading-snug pt-0.5">エアコン専用コンセント・電圧について</h3>
+            </div>
+            <ul class="space-y-2 text-[13.5px] text-slate-700 leading-relaxed pl-1">
+              <li class="flex items-start gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-ityBlue shrink-0 mt-2"></span>
+                <span>エアコンの設置には<strong class="text-ityNavyDeep">「エアコン専用コンセント」</strong>が必要です（通常のコンセントからの延長コード使用はできません）。</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-ityBlue shrink-0 mt-2"></span>
+                <span>機種によっては電圧（100V／200V）やコンセントの形状が異なるため、切替工事やコンセント交換が必要になる場合があります。</span>
+              </li>
+            </ul>
+            <div class="mt-3.5 pt-3 border-t border-slate-100 flex justify-end">
+              <button type="button" data-confirm-btn="1" aria-pressed="false" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-300 bg-slate-50 text-slate-600 text-[12.5px] font-bold active:scale-95 transition cursor-pointer">
+                <span class="w-4 h-4 rounded border border-slate-400 bg-white inline-flex items-center justify-center" data-confirm-box></span>
+                <span data-confirm-label>確認しました</span>
+              </button>
+            </div>
+          </article>
+
+          <!-- 2. 配管穴・既存化粧カバーについて -->
+          <article class="bg-white rounded-2xl border-2 border-slate-200/90 p-4 shadow-sm transition-all duration-200" data-check-card="2">
+            <div class="flex items-start gap-2.5 mb-2.5">
+              <span class="w-7 h-7 rounded-xl bg-ityNavy text-white text-sm font-extrabold flex items-center justify-center shrink-0">2</span>
+              <h3 class="text-[15px] font-extrabold text-ityNavyDeep leading-snug pt-0.5">配管穴・既存化粧カバーについて</h3>
+            </div>
+            <ul class="space-y-2 text-[13.5px] text-slate-700 leading-relaxed pl-1">
+              <li class="flex items-start gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-ityBlue shrink-0 mt-2"></span>
+                <span>配管用の穴がない場合、外壁の材質（木造・サイディング・タイル・コンクリートなど）によっては穴あけ工事ができない、または別途費用がかかる場合があります。</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-ityBlue shrink-0 mt-2"></span>
+                <span>賃貸物件の場合は、穴あけやビス留めについて事前に大家様・管理会社様へご確認をお願いいたします。</span>
+              </li>
+            </ul>
+
+            <!-- 既存化粧カバー再利用の重要注意ボックス -->
+            <div class="mt-3 bg-amber-50 border border-amber-400 rounded-xl p-3 flex items-start gap-2">
+              <svg class="w-5 h-5 text-amber-600 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+              <p class="text-[12.5px] text-amber-950 leading-relaxed">
+                <strong class="font-extrabold">既存の化粧カバーを再利用される場合：</strong>外壁塗装をされたことがあるお宅では、カバーが塗料で外壁に固着しており、取り外し時に塗装が剥がれたり再利用できない場合があります。また、経年劣化で割れてしまう場合も交換が必要となります。
+              </p>
+            </div>
+
+            <div class="mt-3.5 pt-3 border-t border-slate-100 flex justify-end">
+              <button type="button" data-confirm-btn="2" aria-pressed="false" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-300 bg-slate-50 text-slate-600 text-[12.5px] font-bold active:scale-95 transition cursor-pointer">
+                <span class="w-4 h-4 rounded border border-slate-400 bg-white inline-flex items-center justify-center" data-confirm-box></span>
+                <span data-confirm-label>確認しました</span>
+              </button>
+            </div>
+          </article>
+
+          <!-- 3. 特殊設置・隠蔽（いんぺい）配管について -->
+          <article class="bg-white rounded-2xl border-2 border-slate-200/90 p-4 shadow-sm transition-all duration-200" data-check-card="3">
+            <div class="flex items-start gap-2.5 mb-2.5">
+              <span class="w-7 h-7 rounded-xl bg-ityNavy text-white text-sm font-extrabold flex items-center justify-center shrink-0">3</span>
+              <h3 class="text-[15px] font-extrabold text-ityNavyDeep leading-snug pt-0.5">特殊設置・隠蔽（いんぺい）配管について</h3>
+            </div>
+            <ul class="space-y-2 text-[13.5px] text-slate-700 leading-relaxed pl-1">
+              <li class="flex items-start gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-ityBlue shrink-0 mt-2"></span>
+                <span>壁の中に配管が通っている「隠蔽配管」や、高所作業（2階設置で室外機を1階に置くなど）、屋根置き・壁面・天吊り・二段置きなどの特殊設置は、標準工事外となります。事前にご相談ください。</span>
+              </li>
+            </ul>
+            <div class="mt-3.5 pt-3 border-t border-slate-100 flex justify-end">
+              <button type="button" data-confirm-btn="3" aria-pressed="false" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-300 bg-slate-50 text-slate-600 text-[12.5px] font-bold active:scale-95 transition cursor-pointer">
+                <span class="w-4 h-4 rounded border border-slate-400 bg-white inline-flex items-center justify-center" data-confirm-box></span>
+                <span data-confirm-label>確認しました</span>
+              </button>
+            </div>
+          </article>
+
+          <!-- 4. 作業車の駐車スペースについて -->
+          <article class="bg-white rounded-2xl border-2 border-slate-200/90 p-4 shadow-sm transition-all duration-200" data-check-card="4">
+            <div class="flex items-start gap-2.5 mb-2.5">
+              <span class="w-7 h-7 rounded-xl bg-ityNavy text-white text-sm font-extrabold flex items-center justify-center shrink-0">4</span>
+              <h3 class="text-[15px] font-extrabold text-ityNavyDeep leading-snug pt-0.5">作業車の駐車スペースについて</h3>
+            </div>
+            <ul class="space-y-2 text-[13.5px] text-slate-700 leading-relaxed pl-1">
+              <li class="flex items-start gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-ityBlue shrink-0 mt-2"></span>
+                <span>当日は作業車（ハイエース等）でお伺いします。敷地内に駐車スペースがない場合、近隣のコインパーキングを利用させていただくことがあります（駐車料金はお客様ご負担となる場合がございます）。</span>
+              </li>
+            </ul>
+            <div class="mt-3.5 pt-3 border-t border-slate-100 flex justify-end">
+              <button type="button" data-confirm-btn="4" aria-pressed="false" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-300 bg-slate-50 text-slate-600 text-[12.5px] font-bold active:scale-95 transition cursor-pointer">
+                <span class="w-4 h-4 rounded border border-slate-400 bg-white inline-flex items-center justify-center" data-confirm-box></span>
+                <span data-confirm-label>確認しました</span>
+              </button>
+            </div>
+          </article>
+
+          <!-- 5. 追加料金と当日のご確認について -->
+          <article class="bg-white rounded-2xl border-2 border-slate-200/90 p-4 shadow-sm transition-all duration-200" data-check-card="5">
+            <div class="flex items-start gap-2.5 mb-2.5">
+              <span class="w-7 h-7 rounded-xl bg-ityNavy text-white text-sm font-extrabold flex items-center justify-center shrink-0">5</span>
+              <h3 class="text-[15px] font-extrabold text-ityNavyDeep leading-snug pt-0.5">追加料金と当日のご確認について</h3>
+            </div>
+            <div class="bg-ityBlueSoft border border-ityBlueBorder rounded-xl p-3 text-[13.5px] text-ityNavyDeep leading-relaxed">
+              標準工事に含まれない作業（配管延長、化粧カバー新設、特殊設置など）が必要な場合は、<strong class="font-extrabold underline decoration-ityBlue/50 decoration-2 underline-offset-2">必ず作業前に現地でお見積り金額をご説明し、ご納得いただいてから着工</strong>いたします。
+            </div>
+            <div class="mt-3.5 pt-3 border-t border-slate-100 flex justify-end">
+              <button type="button" data-confirm-btn="5" aria-pressed="false" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-300 bg-slate-50 text-slate-600 text-[12.5px] font-bold active:scale-95 transition cursor-pointer">
+                <span class="w-4 h-4 rounded border border-slate-400 bg-white inline-flex items-center justify-center" data-confirm-box></span>
+                <span data-confirm-label>確認しました</span>
+              </button>
+            </div>
+          </article>
+        </div>
+
+        <!-- 5項目すべて確認完了したときの安心バナー -->
+        <div id="allCheckedBanner" class="hidden bg-emerald-50 border-2 border-emerald-500 rounded-2xl p-4 text-emerald-900 shadow-sm">
+          <div class="flex items-start gap-2.5">
+            <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            <div class="text-[13px] leading-relaxed">
+              <p class="font-extrabold text-emerald-950">すべての項目をご確認ありがとうございます！</p>
+              <p class="mt-0.5">気になる点や当てはまりそうな項目がある場合は、LINEトークからお気軽にご相談ください。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- よくある質問タブへの誘導カード -->
+        <button
+          type="button"
+          data-jump-tab="faq"
+          class="w-full bg-white border-2 border-ityBlueBorder rounded-2xl p-4 flex items-center justify-between gap-3 text-left shadow-sm hover:bg-ityBlueSoft active:scale-[0.99] transition cursor-pointer"
+        >
+          <div class="min-w-0">
+            <span class="text-[11px] font-bold text-ityBlue block mb-0.5">疑問をスッキリ解決！</span>
+            <span class="text-[14px] font-extrabold text-ityNavyDeep block">よくある質問（Q&amp;A）を見る</span>
+          </div>
+          <span class="w-9 h-9 rounded-full bg-ityBlueSoft text-ityBlue flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </span>
+        </button>
+      </section>
+
+      <!-- ============================================================
+           共通：LINE相談・お写真送付の案内カード
+           ============================================================ -->
+      <section class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm mt-1">
+        <div class="flex items-start gap-2.5 mb-3">
+          <div class="w-9 h-9 rounded-xl bg-lineGreen/15 text-lineGreen flex items-center justify-center shrink-0" aria-hidden="true">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 5.92 2 10.75c0 2.66 1.38 5.04 3.56 6.64.18.13.29.34.28.56l-.12 2.41c-.02.42.42.7.79.5l2.75-1.5c.2-.11.43-.14.66-.09.68.14 1.38.23 2.08.23 5.52 0 10-3.92 10-8.75S17.52 2 12 2z"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-[14.5px] font-extrabold text-ityNavyDeep leading-snug">わからない点はお気軽にLINEでご相談ください</h3>
+            <p class="text-[12.5px] text-slate-600 leading-relaxed mt-1">
+              設置場所やコンセント・室外機置き場のお写真をLINEトークでお送りいただくと、より正確なお見積りをご案内できます。
+            </p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          id="copyConsultTemplateBtn"
+          class="w-full py-3 px-4 rounded-xl bg-lineGreen hover:bg-lineGreenDark text-white text-[13.5px] font-extrabold flex items-center justify-center gap-2 shadow-md shadow-lineGreen/25 active:scale-[0.98] transition cursor-pointer"
+        >
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span>LINE相談テンプレートをコピーする</span>
+        </button>
+      </section>
+
+      <!-- フッター -->
+      <footer class="text-center text-[11.5px] text-slate-500 pt-2 pb-4 leading-relaxed">
+        ITY電気｜エアコン取付・取り外し・電気工事<br />
+        LINEトーク画面に戻る場合は、右上の「×」ボタンで閉じてください。
+      </footer>
+
+    </main>
+  </div>
+
+  <!-- ==================== トースト通知（alert不使用） ==================== -->
+  <div
+    id="toastEl"
+    role="status"
+    aria-live="polite"
+    class="fixed top-16 left-1/2 -translate-x-1/2 -translate-y-3 z-50 w-[calc(100%-28px)] max-w-[460px] bg-slate-900 text-white border border-white/20 rounded-2xl px-4 py-3 shadow-2xl flex items-center gap-2.5 text-[13px] font-bold opacity-0 pointer-events-none transition-all duration-200"
+  >
+    <svg class="w-5 h-5 text-lineGreen shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <span id="toastText">コピーしました！LINEトークに貼り付けて送信してください。</span>
+  </div>
+
+  <!-- ==================== ページ制御スクリプト ==================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      // ---------- DOM参照 ----------
+      const tabBtnFaq = document.getElementById('tabBtnFaq');
+      const tabBtnCheck = document.getElementById('tabBtnCheck');
+      const panelFaq = document.getElementById('panelFaq');
+      const panelCheck = document.getElementById('panelCheck');
+      const jumpTabButtons = document.querySelectorAll('[data-jump-tab]');
+
+      const faqItems = document.querySelectorAll('[data-faq-item]');
+      const toggleAllFaqBtn = document.getElementById('toggleAllFaqBtn');
+
+      const confirmButtons = document.querySelectorAll('[data-confirm-btn]');
+      const checkProgressBadge = document.getElementById('checkProgressBadge');
+      const checkProgressBar = document.getElementById('checkProgressBar');
+      const allCheckedBanner = document.getElementById('allCheckedBanner');
+
+      const copyConsultTemplateBtn = document.getElementById('copyConsultTemplateBtn');
+      const toastEl = document.getElementById('toastEl');
+      const toastText = document.getElementById('toastText');
+
+      const checkedSet = new Set();
+      let toastTimerId = null;
+
+      /**
+       * タブを切り替える（'faq' または 'check'）
+       * @param {'faq'|'check'} target
+       * @param {boolean} updateHash
+       */
+      function switchTab(target, updateHash) {
+        try {
+          const isCheck = target === 'check';
+
+          // パネルの表示切り替え
+          panelFaq.classList.toggle('hidden', isCheck);
+          panelFaq.classList.toggle('flex', !isCheck);
+          panelCheck.classList.toggle('hidden', !isCheck);
+          panelCheck.classList.toggle('flex', isCheck);
+
+          // タブボタンのスタイル更新
+          applyTabButtonStyle(tabBtnFaq, !isCheck);
+          applyTabButtonStyle(tabBtnCheck, isCheck);
+
+          // URLハッシュを同期（LINEリッチメニューから #faq / #check で直接遷移可能）
+          if (updateHash && window.history && window.history.replaceState) {
+            window.history.replaceState(null, '', isCheck ? '#check' : '#faq');
+          }
+
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch (err) {
+          console.error('タブ切替エラー:', err);
+        }
+      }
+
+      /**
+       * タブボタンのアクティブ・非アクティブ見た目を適用
+       * @param {HTMLElement} btn
+       * @param {boolean} isActive
+       */
+      function applyTabButtonStyle(btn, isActive) {
+        if (!btn) return;
+        btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        if (isActive) {
+          btn.classList.add('bg-ityNavy', 'text-white', 'shadow-sm');
+          btn.classList.remove('text-slate-600', 'hover:text-ityNavy');
+        } else {
+          btn.classList.remove('bg-ityNavy', 'text-white', 'shadow-sm');
+          btn.classList.add('text-slate-600', 'hover:text-ityNavy');
+        }
+      }
+
+      /**
+       * URLのハッシュ（#faq / #check）またはクエリ（?tab=check）から初期タブを判定
+       * @returns {'faq'|'check'}
+       */
+      function detectInitialTab() {
+        try {
+          const hash = (window.location.hash || '').replace('#', '').toLowerCase();
+          if (hash === 'check' || hash === 'checklist' || hash === 'notice') {
+            return 'check';
+          }
+          if (hash === 'faq') {
+            return 'faq';
+          }
+          const params = new URLSearchParams(window.location.search || '');
+          const qTab = (params.get('tab') || '').toLowerCase();
+          if (qTab === 'check' || qTab === 'checklist' || qTab === 'notice') {
+            return 'check';
+          }
+        } catch (err) {
+          console.error('初期タブ判定エラー:', err);
+        }
+        return 'faq';
+      }
+
+      /**
+       * 個別のQ&Aアコーディオンを開閉
+       * @param {HTMLElement} item
+       * @param {boolean} shouldOpen
+       */
+      function setFaqItemOpen(item, shouldOpen) {
+        const trigger = item.querySelector('[data-faq-trigger]');
+        const body = item.querySelector('[data-faq-body]');
+        const chevron = item.querySelector('[data-faq-chevron]');
+        if (!trigger || !body || !chevron) return;
+
+        item.dataset.open = shouldOpen ? 'true' : 'false';
+        trigger.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+        body.classList.toggle('hidden', !shouldOpen);
+        chevron.classList.toggle('rotate-180', shouldOpen);
+        item.classList.toggle('border-ityBlueBorder', shouldOpen);
+        item.classList.toggle('border-slate-200/90', !shouldOpen);
+      }
+
+      /**
+       * 「すべて開く／すべて閉じる」ボタンの表示テキストを最新化
+       */
+      function syncToggleAllFaqLabel() {
+        if (!toggleAllFaqBtn) return;
+        let allOpen = true;
+        faqItems.forEach(function (item) {
+          if (item.dataset.open !== 'true') {
+            allOpen = false;
+          }
+        });
+        toggleAllFaqBtn.textContent = allOpen ? 'すべて閉じる' : 'すべて開く';
+      }
+
+      /**
+       * 「工事前のご確認事項」のチェック進捗を更新
+       */
+      function updateCheckProgress() {
+        const total = confirmButtons.length;
+        const done = checkedSet.size;
+        const percent = total > 0 ? Math.round((done / total) * 100) : 0;
+
+        if (checkProgressBadge) {
+          checkProgressBadge.textContent = '確認済み ' + done + ' / ' + total;
+        }
+        if (checkProgressBar) {
+          checkProgressBar.style.width = percent + '%';
+          checkProgressBar.classList.toggle('bg-emerald-500', done === total);
+          checkProgressBar.classList.toggle('bg-ityBlue', done !== total);
+        }
+        if (allCheckedBanner) {
+          allCheckedBanner.classList.toggle('hidden', done < total);
+        }
+      }
+
+      /**
+       * トースト通知を表示（alert不使用）
+       * @param {string} message
+       */
+      function showToast(message) {
+        if (!toastEl || !toastText) return;
+        toastText.textContent = message;
+        toastEl.classList.remove('opacity-0', '-translate-y-3', 'pointer-events-none');
+        toastEl.classList.add('opacity-100', 'translate-y-0');
+        if (toastTimerId) {
+          clearTimeout(toastTimerId);
+        }
+        toastTimerId = setTimeout(function () {
+          toastEl.classList.add('opacity-0', '-translate-y-3', 'pointer-events-none');
+          toastEl.classList.remove('opacity-100', 'translate-y-0');
+        }, 3200);
+      }
+
+      /**
+       * iFrame対応のクリップボードコピー（execCommand使用）
+       * @param {string} text
+       * @returns {boolean}
+       */
+      function copyTextToClipboard(text) {
+        try {
+          const tempArea = document.createElement('textarea');
+          tempArea.value = text;
+          tempArea.setAttribute('readonly', '');
+          tempArea.style.position = 'fixed';
+          tempArea.style.top = '-9999px';
+          tempArea.style.left = '-9999px';
+          document.body.appendChild(tempArea);
+          tempArea.focus();
+          tempArea.select();
+          tempArea.setSelectionRange(0, tempArea.value.length);
+          const ok = document.execCommand('copy');
+          document.body.removeChild(tempArea);
+          return ok;
+        } catch (err) {
+          return false;
+        }
+      }
+
+      // ---------- イベント登録 ----------
+
+      // タブ切り替えボタン
+      if (tabBtnFaq) {
+        tabBtnFaq.addEventListener('click', function () {
+          switchTab('faq', true);
+        });
+      }
+      if (tabBtnCheck) {
+        tabBtnCheck.addEventListener('click', function () {
+          switchTab('check', true);
+        });
+      }
+      jumpTabButtons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const target = btn.dataset.jumpTab === 'check' ? 'check' : 'faq';
+          switchTab(target, true);
+        });
+      });
+
+      // ブラウザの戻る／進むやハッシュ変更にも対応
+      window.addEventListener('hashchange', function () {
+        switchTab(detectInitialTab(), false);
+      });
+
+      // Q&A アコーディオン開閉
+      faqItems.forEach(function (item) {
+        const trigger = item.querySelector('[data-faq-trigger]');
+        if (!trigger) return;
+        trigger.addEventListener('click', function () {
+          const isCurrentlyOpen = item.dataset.open === 'true';
+          setFaqItemOpen(item, !isCurrentlyOpen);
+          syncToggleAllFaqLabel();
+        });
+      });
+
+      // Q&A「すべて開く／すべて閉じる」
+      if (toggleAllFaqBtn) {
+        toggleAllFaqBtn.addEventListener('click', function () {
+          const shouldOpenAll = toggleAllFaqBtn.textContent === 'すべて開く';
+          faqItems.forEach(function (item) {
+            setFaqItemOpen(item, shouldOpenAll);
+          });
+          syncToggleAllFaqLabel();
+        });
+      }
+
+      // 「確認しました」トグルボタン
+      confirmButtons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const id = btn.dataset.confirmBtn;
+          const card = document.querySelector('[data-check-card="' + id + '"]');
+          const box = btn.querySelector('[data-confirm-box]');
+          const label = btn.querySelector('[data-confirm-label]');
+          if (!id || !card || !box || !label) return;
+
+          const willCheck = !checkedSet.has(id);
+          if (willCheck) {
+            checkedSet.add(id);
+            btn.setAttribute('aria-pressed', 'true');
+            btn.classList.remove('border-slate-300', 'bg-slate-50', 'text-slate-600');
+            btn.classList.add('border-ityBlue', 'bg-ityBlue', 'text-white');
+            box.classList.remove('border-slate-400', 'bg-white');
+            box.classList.add('border-white', 'bg-white/20');
+            box.innerHTML = '<svg class="w-3 h-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+            label.textContent = '確認済み';
+            card.classList.remove('border-slate-200/90', 'bg-white');
+            card.classList.add('border-ityBlue', 'bg-ityBlueSoft/40');
+          } else {
+            checkedSet.delete(id);
+            btn.setAttribute('aria-pressed', 'false');
+            btn.classList.add('border-slate-300', 'bg-slate-50', 'text-slate-600');
+            btn.classList.remove('border-ityBlue', 'bg-ityBlue', 'text-white');
+            box.classList.add('border-slate-400', 'bg-white');
+            box.classList.remove('border-white', 'bg-white/20');
+            box.textContent = '';
+            label.textContent = '確認しました';
+            card.classList.add('border-slate-200/90', 'bg-white');
+            card.classList.remove('border-ityBlue', 'bg-ityBlueSoft/40');
+          }
+
+          updateCheckProgress();
+        });
+      });
+
+      // LINE相談テンプレートのコピー
+      if (copyConsultTemplateBtn) {
+        copyConsultTemplateBtn.addEventListener('click', function () {
+          const templateText = [
+            '【ITY電気 エアコン工事のご相談】',
+            '・ご希望の工事内容：（新規取付／入れ替え／取り外し等）',
+            '・エアコンの型番（わかれば）：',
+            '・設置階数・室外機の置き場所：',
+            '・ご希望の時期：',
+            '・気になる点・ご質問：',
+            '',
+            '※設置場所やコンセントのお写真があればあわせてお送りください！',
+          ].join('\n');
+
+          const ok = copyTextToClipboard(templateText);
+          if (ok) {
+            showToast('コピーしました！LINEトークに貼り付けてお送りください。');
+          } else {
+            showToast('コピーに失敗しました。そのままLINEトークにてご相談ください。');
+          }
+        });
+      }
+
+      // 初期表示
+      switchTab(detectInitialTab(), false);
+      syncToggleAllFaqLabel();
+      updateCheckProgress();
+    })();
+  </script>
+</body>
+</html>
