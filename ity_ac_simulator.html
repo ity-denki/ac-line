@@ -261,6 +261,24 @@
       color: #475569;
     }
 
+    .badge-auto {
+      display: none;
+      align-items: center;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #f59e0b;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    .badge-auto.is-visible {
+      display: inline-flex;
+    }
+
     .section-desc {
       margin: 0 0 12px;
       font-size: 0.78rem;
@@ -1416,15 +1434,15 @@
             <div class="choice-price choice-price-lg">20,000<small>円</small></div>
           </button>
 
-          <button type="button" class="choice-card choice-card-lg" data-std-btn="8.0+" data-price="24000" data-label="標準取付工事（8.0kW以上）" role="radio" aria-checked="false">
+          <button type="button" class="choice-card choice-card-lg" data-std-btn="8.0+" data-price="25000" data-label="標準取付工事（8.0kW〜9.0kW）" role="radio" aria-checked="false">
             <div class="choice-left choice-left-center">
               <span class="radio-ui" aria-hidden="true"></span>
               <div class="choice-text">
-                <span class="choice-title">8.0kW以上</span>
+                <span class="choice-title">8.0kW〜9.0kW</span>
                 <span class="choice-sub">大型機種・広いLDK向け</span>
               </div>
             </div>
-            <div class="choice-price choice-price-lg">24,000<small>円</small></div>
+            <div class="choice-price choice-price-lg">25,000<small>円</small></div>
           </button>
         </div>
 
@@ -1453,59 +1471,77 @@
 
         <div class="option-list">
           <label class="choice-card" data-check-card>
-            <input type="checkbox" class="sr-input special-opt" value="12000" data-label="2階 → 1階工事" />
-            <div class="choice-left choice-left-center">
+            <input type="checkbox" id="chk2f1f" class="sr-input special-opt" value="15000" data-label="2階 → 1階工事" />
+            <div class="choice-left">
               <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
-              <span class="choice-title">2階 → 1階工事</span>
+              <div class="choice-text">
+                <span class="choice-title">2階 → 1階工事</span>
+                <span class="choice-sub">※選択時は「高所作業（+5,000円）」が自動で追加されます</span>
+              </div>
             </div>
-            <div class="choice-price">+12,000<small>円</small></div>
+            <div class="choice-price">+15,000<small>円</small></div>
           </label>
 
           <label class="choice-card" data-check-card>
-            <input type="checkbox" class="sr-input special-opt" value="18000" data-label="3階 → 1階工事" />
-            <div class="choice-left choice-left-center">
+            <input type="checkbox" id="chk3f1f" class="sr-input special-opt" value="20000" data-label="3階 → 1階工事" />
+            <div class="choice-left">
               <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
-              <span class="choice-title">3階 → 1階工事</span>
+              <div class="choice-text">
+                <span class="choice-title">3階 → 1階工事</span>
+                <span class="choice-sub">※選択時は「高所作業（+5,000円）」が自動で追加されます</span>
+              </div>
             </div>
-            <div class="choice-price">+18,000<small>円</small></div>
+            <div class="choice-price">+20,000<small>円</small></div>
           </label>
 
           <label class="choice-card" data-check-card>
-            <input type="checkbox" class="sr-input special-opt" value="12000" data-label="屋根置き工事（1階屋根）" />
+            <input type="checkbox" id="chkHighWork" class="sr-input special-opt" value="5000" data-label="高所作業" />
+            <div class="choice-left">
+              <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+              <div class="choice-text">
+                <span class="choice-title">高所作業<span class="badge-auto" id="highWorkAutoBadge">自動選択中</span></span>
+                <span class="choice-sub">屋根上作業や2連梯子で届く範囲（2階→1階／3階→1階工事時は自動適用）</span>
+              </div>
+            </div>
+            <div class="choice-price">+5,000<small>円</small></div>
+          </label>
+
+          <label class="choice-card" data-check-card>
+            <input type="checkbox" class="sr-input special-opt" value="15000" data-label="屋根置き工事（1階屋根）" />
             <div class="choice-left choice-left-center">
               <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
               <span class="choice-title">屋根置き工事（1階屋根）</span>
             </div>
-            <div class="choice-price">+12,000<small>円</small></div>
+            <div class="choice-price">+15,000<small>円</small></div>
           </label>
 
           <label class="choice-card" data-check-card>
-            <input type="checkbox" class="sr-input special-opt" value="8000" data-label="サービスバルコニー工事" />
+            <input type="checkbox" class="sr-input special-opt" value="10000" data-label="サービスバルコニー工事" />
             <div class="choice-left choice-left-center">
               <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
               <span class="choice-title">サービスバルコニー工事</span>
             </div>
-            <div class="choice-price">+8,000<small>円</small></div>
+            <div class="choice-price">+10,000<small>円</small></div>
           </label>
 
           <label class="choice-card" data-check-card>
-            <input type="checkbox" class="sr-input special-opt" value="12000" data-label="公団吊り（天吊り）工事" />
+            <input type="checkbox" class="sr-input special-opt" value="15000" data-label="公団吊り（天吊り）工事" />
             <div class="choice-left choice-left-center">
               <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
               <span class="choice-title">公団吊り（天吊り）工事</span>
             </div>
-            <div class="choice-price">+12,000<small>円</small></div>
+            <div class="choice-price">+15,000<small>円</small></div>
           </label>
 
           <!-- 室外機 壁面設置工事（条件分岐付き） -->
           <div class="option-group-box" id="groupWallMount">
             <label class="choice-card">
-              <input type="checkbox" id="chkWallMount" class="sr-input special-opt" value="12000" data-label="室外機 壁面設置工事" />
+              <input type="checkbox" id="chkWallMount" class="sr-input special-opt" value="15000" data-label="室外機 壁面設置工事" />
               <div class="choice-left choice-left-center">
                 <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
                 <span class="choice-title">室外機 壁面設置工事</span>
               </div>
-              <div class="choice-price">+12,000<small>円</small></div>
+              <div class="choice-price">+15,000<small>円</small></div>
             </label>
 
             <!-- 条件分岐：壁面設置チェック時のみ展開 -->
@@ -1552,19 +1588,22 @@
           </div>
 
           <label class="choice-card" data-check-card>
-            <input type="checkbox" class="sr-input special-opt" value="25000" data-label="2段置き架台工事" />
+            <input type="checkbox" class="sr-input special-opt" value="28000" data-label="2段置き架台工事" />
             <div class="choice-left choice-left-center">
               <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
               <span class="choice-title">2段置き架台工事</span>
             </div>
-            <div class="choice-price">+25,000<small>円</small></div>
+            <div class="choice-price">+28,000<small>円</small></div>
           </label>
 
           <label class="choice-card" data-check-card>
             <input type="checkbox" class="sr-input special-opt" value="7000" data-label="各特殊架台の再利用工事" />
-            <div class="choice-left choice-left-center">
+            <div class="choice-left">
               <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
-              <span class="choice-title">各特殊架台の再利用工事</span>
+              <div class="choice-text">
+                <span class="choice-title">各特殊架台の再利用工事</span>
+                <span class="choice-sub">※2段置き上段は5,000円／下段は7,000円（その他は同一金額）</span>
+              </div>
             </div>
             <div class="choice-price">+7,000<small>円</small></div>
           </label>
@@ -1572,12 +1611,12 @@
           <!-- 隠蔽配管の再利用工事（条件分岐付き） -->
           <div class="option-group-box" id="groupConcealed">
             <label class="choice-card">
-              <input type="checkbox" id="chkConcealed" class="sr-input special-opt" value="8000" data-label="隠蔽配管の再利用工事" />
+              <input type="checkbox" id="chkConcealed" class="sr-input special-opt" value="10000" data-label="隠蔽配管の再利用工事" />
               <div class="choice-left choice-left-center">
                 <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
                 <span class="choice-title">隠蔽配管の再利用工事</span>
               </div>
-              <div class="choice-price">+8,000<small>円</small></div>
+              <div class="choice-price">+10,000<small>円</small></div>
             </label>
 
             <div class="branch-wrap" id="branchConcealed" aria-hidden="true">
@@ -1589,7 +1628,7 @@
                       <line x1="12" y1="9" x2="12" y2="13"></line>
                       <line x1="12" y1="17" x2="12.01" y2="17"></line>
                     </svg>
-                    <span>排水の安全確保ができない場合、電源ケーブルが2.0mm以外（1.6mm等）や長さ不足の場合は対応不可・別途対応となる場合があります。</span>
+                    <span>排水の安全確保ができない場合、電源ケーブルが2.0mm以外（1.6mm等）や長さ不足の場合、また加湿・換気タイプのエアコンは施工不可となります。</span>
                   </div>
                 </div>
               </div>
@@ -1622,25 +1661,25 @@
           </label>
 
           <label class="choice-card" data-card-for="outdoorCover">
-            <input type="radio" name="outdoorCover" value="new_basic" data-price="4500" data-label="屋外化粧カバー：配管カバー70（基本）" class="sr-input" />
+            <input type="radio" name="outdoorCover" value="new_basic" data-price="7000" data-label="屋外化粧カバー：配管カバー70（標準）" class="sr-input" />
             <div class="choice-left choice-left-center">
               <span class="radio-ui" aria-hidden="true"></span>
-              <span class="choice-title">配管カバー70（基本）</span>
+              <span class="choice-title">配管カバー70（標準）</span>
             </div>
-            <div class="choice-price">+4,500<small>円</small></div>
+            <div class="choice-price">+7,000<small>円</small></div>
           </label>
 
           <label class="choice-card" data-card-for="outdoorCover">
-            <input type="radio" name="outdoorCover" value="new_2f1f" data-price="12000" data-label="屋外化粧カバー：配管カバー（2階→1階）" class="sr-input" />
+            <input type="radio" name="outdoorCover" value="new_2f1f" data-price="15000" data-label="屋外化粧カバー：配管カバー（2階→1階）" class="sr-input" />
             <div class="choice-left choice-left-center">
               <span class="radio-ui" aria-hidden="true"></span>
               <span class="choice-title">配管カバー（2階→1階）</span>
             </div>
-            <div class="choice-price">+12,000<small>円</small></div>
+            <div class="choice-price">+15,000<small>円</small></div>
           </label>
 
           <label class="choice-card" data-card-for="outdoorCover">
-            <input type="radio" name="outdoorCover" value="reuse_same" data-price="3000" data-label="既存化粧カバー再利用（同一階）" class="sr-input" />
+            <input type="radio" name="outdoorCover" value="reuse_same" data-price="4000" data-label="既存化粧カバー再利用（同一階）" class="sr-input" />
             <div class="choice-left">
               <span class="radio-ui" aria-hidden="true"></span>
               <div class="choice-text">
@@ -1648,19 +1687,19 @@
                 <span class="choice-sub">ペンキ等で脱着困難でない場合</span>
               </div>
             </div>
-            <div class="choice-price">+3,000<small>円</small></div>
+            <div class="choice-price">+4,000<small>円</small></div>
           </label>
 
           <label class="choice-card" data-card-for="outdoorCover">
-            <input type="radio" name="outdoorCover" value="reuse_2f1f" data-price="5000" data-label="既存化粧カバー再利用（2階→1階）" class="sr-input" />
+            <input type="radio" name="outdoorCover" value="reuse_2f1f" data-price="7000" data-label="既存化粧カバー再利用（2階→1階）" class="sr-input" />
             <div class="choice-left">
               <span class="radio-ui" aria-hidden="true"></span>
               <div class="choice-text">
                 <span class="choice-title">既存化粧カバー再利用（2階→1階）</span>
-                <span class="choice-sub">ペンキ等で脱着困難でない場合</span>
+                <span class="choice-sub">ペンキ等で脱着困難でない場合（高所作業含む）</span>
               </div>
             </div>
-            <div class="choice-price">+5,000<small>円</small></div>
+            <div class="choice-price">+7,000<small>円</small></div>
           </label>
         </div>
 
@@ -1763,13 +1802,13 @@
         <!-- 室内化粧カバー（標準・独立チェックカード／カード内に常時仕様表示） -->
         <p class="sub-group-title">室内化粧カバー</p>
         <label class="choice-card choice-card-column" data-check-card>
-          <input type="checkbox" id="chkIndoorCover" class="sr-input" value="10000" data-label="室内化粧カバー（標準）" />
+          <input type="checkbox" id="chkIndoorCover" class="sr-input" value="18000" data-label="室内化粧カバー（標準）" />
           <div class="choice-card-top">
             <div class="choice-left choice-left-center">
               <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
               <span class="choice-title">室内化粧カバー（標準）</span>
             </div>
-            <div class="choice-price">+10,000<small>円</small></div>
+            <div class="choice-price">+18,000<small>円</small></div>
           </div>
           <div class="card-inline-spec">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -1808,7 +1847,7 @@
             <line x1="12" y1="16" x2="12" y2="12"></line>
             <line x1="12" y1="8" x2="12.01" y2="8"></line>
           </svg>
-          <span>※標準工事（配管4mまで）を超える場合の延長分です。大型機種など『2分4分配管』が必要な機種は、型番を確認のうえ事前にお見積りをご案内いたします。</span>
+          <span>※標準的な2階→1階工事の場合、配管は合計7m（標準4m＋延長3m）がおおよその目安です。<br />※2分4分配管の場合は別途お見積りが必要です。</span>
         </div>
       </section>
 
@@ -1826,12 +1865,36 @@
 
         <div class="option-list">
           <label class="choice-card" data-check-card>
-            <input type="checkbox" id="chkRemove" class="sr-input" value="6000" data-label="標準取り外し（入れ替え時）" />
+            <input type="checkbox" id="chkRemove" class="sr-input remove-opt" value="6000" data-label="標準取り外し（入れ替え時）" />
             <div class="choice-left choice-left-center">
               <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
               <span class="choice-title">標準取り外し（入れ替え時）</span>
             </div>
             <div class="choice-price">+6,000<small>円</small></div>
+          </label>
+
+          <label class="choice-card" data-check-card>
+            <input type="checkbox" class="sr-input remove-opt" value="10000" data-label="2階 → 1階 取り外し" data-sub="高所作業を含む" />
+            <div class="choice-left">
+              <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+              <div class="choice-text">
+                <span class="choice-title">2階 → 1階 取り外し</span>
+                <span class="choice-sub">高所作業を含む</span>
+              </div>
+            </div>
+            <div class="choice-price">+10,000<small>円</small></div>
+          </label>
+
+          <label class="choice-card" data-check-card>
+            <input type="checkbox" class="sr-input remove-opt" value="12000" data-label="3階 → 1階 取り外し" data-sub="高所作業を含む" />
+            <div class="choice-left">
+              <span class="check-ui" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+              <div class="choice-text">
+                <span class="choice-title">3階 → 1階 取り外し</span>
+                <span class="choice-sub">高所作業を含む</span>
+              </div>
+            </div>
+            <div class="choice-price">+12,000<small>円</small></div>
           </label>
 
           <!-- 処分費（収集運搬料）＋RKC公式リンク条件分岐 -->
@@ -1916,23 +1979,6 @@
             </div>
             <div class="choice-price">+25,000<small>円</small></div>
           </button>
-        </div>
-
-        <!-- 専用回路工事に関する常時表示の注意書きボックス（専用回路選択時は強調表示） -->
-        <div class="circuit-note-box" id="circuitNoteBox">
-          <div class="circuit-note-head">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="16" x2="12" y2="12"></line>
-              <line x1="12" y1="8" x2="12.01" y2="8"></line>
-            </svg>
-            <span>専用回路工事の追加費用について（現地確認項目）</span>
-          </div>
-          <ul class="circuit-note-list">
-            <li><strong>配線延長：</strong>基本の長さ（同一階10m／2階⇔1階20m）を超える場合、1m延長ごとに <strong>＋1,000円（税別）</strong> ※同一階・2階⇔1階共通</li>
-            <li><strong>隠蔽配線：</strong>屋根裏や床下を通して配線する必要がある場合、<strong>＋4,000円（税別）</strong></li>
-          </ul>
-          <p class="circuit-note-foot">※屋根裏・床下を通す必要があるかや実際の配線長さは、お客様側でのご判断が難しいため、現地状況を確認のうえ作業前にご説明・お見積りいたします。</p>
         </div>
 
         <hr class="divider" />
@@ -2077,6 +2123,8 @@
       let selectedCircuitKey = null;
       // セクション4（配管延長メートル数）
       let pipeMeters = 0;
+      // 高所作業を手動で選択しているかどうかの状態管理（2F1F/3F1F自動連動用）
+      let highWorkManual = false;
       // LINE送信用に生成された最新テキスト
       let latestConsultText = '';
       let toastTimerId = null;
@@ -2087,6 +2135,10 @@
 
       const stdButtons = document.querySelectorAll('[data-std-btn]');
       const specialOpts = document.querySelectorAll('.special-opt');
+      const chk2f1f = document.getElementById('chk2f1f');
+      const chk3f1f = document.getElementById('chk3f1f');
+      const chkHighWork = document.getElementById('chkHighWork');
+      const highWorkAutoBadge = document.getElementById('highWorkAutoBadge');
       const chkWallMount = document.getElementById('chkWallMount');
       const groupWallMount = document.getElementById('groupWallMount');
       const branchWallMount = document.getElementById('branchWallMount');
@@ -2112,13 +2164,12 @@
       const pipeMeterValue = document.getElementById('pipeMeterValue');
       const pipeCostValue = document.getElementById('pipeCostValue');
 
-      const chkRemove = document.getElementById('chkRemove');
+      const removeOpts = document.querySelectorAll('.remove-opt');
       const chkDisposal = document.getElementById('chkDisposal');
       const groupDisposal = document.getElementById('groupDisposal');
       const branchDisposal = document.getElementById('branchDisposal');
 
       const circuitButtons = document.querySelectorAll('[data-circuit-btn]');
-      const circuitNoteBox = document.getElementById('circuitNoteBox');
       const chkVoltage = document.getElementById('chkVoltage');
       const chkOutlet = document.getElementById('chkOutlet');
 
@@ -2141,8 +2192,10 @@
       const modalCloseBtn = document.getElementById('modalCloseBtn');
       const modalRecopyBtn = document.getElementById('modalRecopyBtn');
 
+      // ---------- 共通ヘルパー関数 ----------
+
       /**
-       * 数値を3桁カンマ区切りにフォーマット
+       * 数値を日本円表記（3桁カンマ区切り）へ整形
        * @param {number} num
        * @returns {string}
        */
@@ -2151,7 +2204,7 @@
       }
 
       /**
-       * 指定nameでチェック済みのラジオ要素を取得
+       * 指定したname属性のチェック済みラジオボタンを取得
        * @param {string} name
        * @returns {HTMLInputElement|null}
        */
@@ -2160,7 +2213,7 @@
       }
 
       /**
-       * 指定name・valueのラジオを選択状態にセット
+       * 指定したname属性のラジオボタンに値をセット
        * @param {string} name
        * @param {string} value
        */
@@ -2172,14 +2225,30 @@
       }
 
       /**
-       * 条件分岐パネルの開閉を切り替え
+       * 条件分岐パネルの開閉状態を切り替え
        * @param {HTMLElement|null} el
        * @param {boolean} isOpen
        */
       function setBranchOpen(el, isOpen) {
         if (!el) return;
-        el.classList.toggle('is-open', Boolean(isOpen));
-        el.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+        const open = Boolean(isOpen);
+        el.classList.toggle('is-open', open);
+        el.setAttribute('aria-hidden', open ? 'false' : 'true');
+      }
+
+      /**
+       * 2階→1階／3階→1階工事の選択に応じて高所作業を自動連動させる
+       * @returns {boolean} 自動適用中ならtrue
+       */
+      function syncHighWorkAuto() {
+        const isAutoRequired = Boolean((chk2f1f && chk2f1f.checked) || (chk3f1f && chk3f1f.checked));
+        if (chkHighWork) {
+          chkHighWork.checked = isAutoRequired ? true : highWorkManual;
+        }
+        if (highWorkAutoBadge) {
+          highWorkAutoBadge.classList.toggle('is-visible', isAutoRequired);
+        }
+        return isAutoRequired;
       }
 
       /**
@@ -2193,15 +2262,12 @@
           btn.setAttribute('aria-checked', isSelected ? 'true' : 'false');
         });
 
-        // 6. 専用回路工事（ボタン型ラジオ＋常時表示の注意書きボックス強調連動）
+        // 6. 専用回路工事（ボタン型ラジオ）
         circuitButtons.forEach(function (btn) {
           const isSelected = btn.dataset.circuitBtn === selectedCircuitKey;
           btn.classList.toggle('is-selected', isSelected);
           btn.setAttribute('aria-checked', isSelected ? 'true' : 'false');
         });
-        if (circuitNoteBox) {
-          circuitNoteBox.classList.toggle('is-highlighted', selectedCircuitKey !== null);
-        }
 
         // チェックボックスカード全般
         document.querySelectorAll('[data-check-card]').forEach(function (card) {
@@ -2322,10 +2388,9 @@
        * @param {number} tax
        * @param {number} total
        * @param {boolean} hasDisposal
-       * @param {boolean} hasCircuit
        * @returns {string}
        */
-      function buildConsultText(items, subtotal, tax, total, hasDisposal, hasCircuit) {
+      function buildConsultText(items, subtotal, tax, total, hasDisposal) {
         const lines = [];
         lines.push('【ITY電気 エアコン工事 料金シミュレーション結果】');
         lines.push('');
@@ -2351,9 +2416,6 @@
         if (hasDisposal) {
           lines.push('※上記とは別に、法定の家電リサイクル料金がかかります。');
         }
-        if (hasCircuit) {
-          lines.push('※専用回路の配線延長（+1,000円/m）や屋根裏・床下の隠蔽配線（+4,000円）は現地状況を確認のうえご案内いたします。');
-        }
 
         lines.push('');
         lines.push('※エアコンの型番や設置場所のお写真をあわせてお送りいただけますと、よりスムーズにお見積りできます。');
@@ -2367,6 +2429,7 @@
        */
       function recalculate() {
         try {
+          const isHighWorkAuto = syncHighWorkAuto();
           syncHighlights();
           updateBranches();
 
@@ -2389,7 +2452,9 @@
           specialOpts.forEach(function (opt) {
             if (!opt.checked) return;
             let subText = '';
-            if (opt === chkWallMount) {
+            if (opt === chkHighWork && isHighWorkAuto) {
+              subText = '2階→1階／3階→1階工事に伴い自動追加';
+            } else if (opt === chkWallMount) {
               const mat = getCheckedRadio('wallMaterial');
               const matVal = mat ? mat.value : 'わからない';
               subText = '外壁の材質：' + matVal;
@@ -2397,7 +2462,7 @@
                 subText += '（※強度により工事不可の場合あり）';
               }
             } else if (opt === chkConcealed) {
-              subText = '※排水・電源ケーブル（2.0mm等）の現地確認が必要';
+              subText = '※排水・電源ケーブル（2.0mm等）の現地確認が必要／加湿・換気タイプ施工不可';
             }
             items.push({
               label: opt.dataset.label,
@@ -2459,13 +2524,14 @@
           }
 
           // 5. 既存エアコンの取り外し・処分
-          if (chkRemove && chkRemove.checked) {
+          removeOpts.forEach(function (opt) {
+            if (!opt.checked) return;
             items.push({
-              label: chkRemove.dataset.label,
-              sub: '',
-              price: Number(chkRemove.value || 0)
+              label: opt.dataset.label,
+              sub: opt.dataset.sub || '',
+              price: Number(opt.value || 0)
             });
-          }
+          });
           const hasDisposal = Boolean(chkDisposal && chkDisposal.checked);
           if (hasDisposal) {
             items.push({
@@ -2476,13 +2542,12 @@
           }
 
           // 6. 電源・コンセント周り
-          const hasCircuit = selectedCircuitKey !== null;
-          if (hasCircuit) {
+          if (selectedCircuitKey !== null) {
             circuitButtons.forEach(function (btn) {
               if (btn.dataset.circuitBtn === selectedCircuitKey) {
                 items.push({
                   label: btn.dataset.label,
-                  sub: '延長（+1,000円/m）・隠蔽配線（+4,000円）は現地確認',
+                  sub: '',
                   price: Number(btn.dataset.price || 0)
                 });
               }
@@ -2522,7 +2587,7 @@
           footerRecycleBadge.classList.toggle('is-visible', hasDisposal);
 
           // LINE相談コピー用テキストを更新
-          latestConsultText = buildConsultText(items, subtotal, tax, total, hasDisposal, hasCircuit);
+          latestConsultText = buildConsultText(items, subtotal, tax, total, hasDisposal);
         } catch (err) {
           console.error('料金計算エラー:', err);
         }
@@ -2607,10 +2672,11 @@
         selectedStdKey = '3.6';
         selectedCircuitKey = null;
         pipeMeters = 0;
+        highWorkManual = false;
 
         specialOpts.forEach(function (opt) { opt.checked = false; });
         if (chkIndoorCover) chkIndoorCover.checked = false;
-        if (chkRemove) chkRemove.checked = false;
+        removeOpts.forEach(function (opt) { opt.checked = false; });
         if (chkDisposal) chkDisposal.checked = false;
         if (chkVoltage) chkVoltage.checked = false;
         if (chkOutlet) chkOutlet.checked = false;
@@ -2636,9 +2702,20 @@
         });
       });
 
-      // 2. 特殊設置・配管工事
+      // 2. 特殊設置・配管工事（高所作業は2F1F／3F1Fと自動連動）
       specialOpts.forEach(function (opt) {
-        opt.addEventListener('change', recalculate);
+        opt.addEventListener('change', function () {
+          if (opt === chkHighWork) {
+            const isAutoRequired = Boolean((chk2f1f && chk2f1f.checked) || (chk3f1f && chk3f1f.checked));
+            if (isAutoRequired && !chkHighWork.checked) {
+              chkHighWork.checked = true;
+              showToast('2階→1階・3階→1階工事を選択中のため、高所作業が自動で含まれます。');
+            } else if (!isAutoRequired) {
+              highWorkManual = chkHighWork.checked;
+            }
+          }
+          recalculate();
+        });
       });
       wallMaterialRadios.forEach(function (radio) {
         radio.addEventListener('change', recalculate);
@@ -2680,7 +2757,9 @@
       }
 
       // 5. 取り外し・処分
-      if (chkRemove) chkRemove.addEventListener('change', recalculate);
+      removeOpts.forEach(function (opt) {
+        opt.addEventListener('change', recalculate);
+      });
       if (chkDisposal) chkDisposal.addEventListener('change', recalculate);
 
       // 6. 電源・コンセント周り（専用回路は単一選択／選択中を再タップで解除）
